@@ -12,6 +12,7 @@ import { avatars } from '../../models/test.data'
 
 
 import './home.page.scss'
+import FabComponent from '../../components/fab/fab.component'
 
 
 const HomePage = () => {
@@ -44,6 +45,13 @@ const HomePage = () => {
             </div>
 
             {/* add link button */}
+            <FabComponent
+                children={
+                    <button className="primary_button">
+                        Add a MetaLink
+                    </button>
+                }
+            />
 
         </div>
     )
