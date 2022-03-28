@@ -6,7 +6,7 @@ type ComponentProps = {
 }
 const SectionTitleComponent = ({ title, children }: ComponentProps) => {
   return (
-    <div className='padded_container_sm section_title_container'>
+    <div className='padded_container section_title_container'>
 
         <p className='section_title_container__title su_3'> { title } </p>
         
