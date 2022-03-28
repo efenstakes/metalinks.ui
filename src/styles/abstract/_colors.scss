@@ -1,0 +1,56 @@
+
+
+$PRIMARY_COLOR: #F2B84B; // 242, 184, 75
+$SECONDARY_COLOR: #FB6542; // 251, 101, 66
+$TERTIARY_COLOR: #41D9D9; // 65, 217, 217
+
+$BLACK_COLOR: #1E1E1E; // 30, 30, 30
+$BLACK_ALT_COLOR: #262626; // 38, 38, 38
+$WHITE_COLOR: #FFFFFF; // 255, 255, 255
+
+$SUCCESS_COLOR: #11872e; // 17, 135, 46
+$ERROR_COLOR: #F23535; // 242, 53, 53
+
+$SUCCESS_GRADIENT: "";
+$ERROR_GRADIENT: "";
+
+
+$CARDS_BACKGROUND: rgba(242, 184, 75, .6);
+$ERROR_COLOR_OPACITY: rgba(242, 53, 53, .6);
+
+
+
+.primary_gradient {
+    background-image: linear-gradient( 30deg, $PRIMARY_COLOR, $SECONDARY_COLOR );
+}
+.primary_gradient_alt {
+    background-image: linear-gradient( 30deg, $SECONDARY_COLOR, $PRIMARY_COLOR );
+}
+
+@for $index from 1 to 12 {
+    .g_bg_ps_#{$index} {
+        background-image: linear-gradient( calc(#{$index}30deg), $SECONDARY_COLOR, $PRIMARY_COLOR );
+        color: rgba(30, 30, 30, .9);
+    } 
+}
+
+@for $index from 1 to 12 {
+    .g_bg_sp_#{$index} {
+        background-image: linear-gradient( calc(#{$index}30deg), $PRIMARY_COLOR, $SECONDARY_COLOR );
+        color: rgba(30, 30, 30, .9);
+    } 
+}
+
+
+.black_background, .bg_black {
+    background-color: $BLACK_COLOR;
+    color: wheat;
+}
+
+@for $index from 1 to 9 {
+    .bg_black_#{$index} {
+        background-color: rgba(30, 30, 30, calc($index/10));
+        color: wheat;
+    } 
+}
+
