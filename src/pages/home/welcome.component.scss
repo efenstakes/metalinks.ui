@@ -1,0 +1,35 @@
+@import '../../styles/commons';
+
+
+
+.welcome_section {
+    min-height: 100vh;
+}
+
+.welcome_section__info__text {
+    max-width: 640px;
+    text-align: center;
+}
+
+.welcome_section__underlay {
+    @include absolute(0, 0, 0, 0);
+    z-index: -10;
+
+    align-self: center;
+    margin: auto;
+    max-width: 960px;
+}
+
+
+.welcome_section__underlay__image {
+    // margin-right: 2rem;
+}
+.welcome_section__underlay__small {
+    height: 8rem;
+    width: 8rem;
+}
+
+.welcome_section__underlay__big {
+    height: 16rem;
+    aspect-ratio: 3/4;
+}

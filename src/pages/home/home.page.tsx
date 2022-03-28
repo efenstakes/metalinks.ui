@@ -3,6 +3,7 @@ import AppbarComponent from '../../components/appbar/appbar.component'
 
 
 import './home.page.scss'
+import WelcomeComponent from './welcome.component'
 
 
 const HomePage = () => {
@@ -13,6 +14,7 @@ const HomePage = () => {
         <AppbarComponent />
 
         {/* welcome */}
+        <WelcomeComponent />
 
         {/* metalinks if any */}
 
