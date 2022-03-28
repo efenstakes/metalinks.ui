@@ -7,7 +7,7 @@
 
 // paper - element with drop shadow
 .paper_sm {
-    box-shadow: $BOX_SHADOW_SM;
+    // box-shadow: $BOX_SHADOW_SM;
 
     &:hover {
         box-shadow: $BOX_SHADOW_HOVER_SM;
