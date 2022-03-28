@@ -8,4 +8,5 @@ export interface MetaLink {
     bg_avatar?: string
     is_active?: boolean
     universe?: string
+    bio?: string
 }

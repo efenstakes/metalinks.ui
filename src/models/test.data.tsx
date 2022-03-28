@@ -17,6 +17,8 @@ export const avatars: Array<Avatar> = [
             bg_avatar: faker.image.people(400, 600),
             is_active: index % 7 === 0,
 
+            bio: faker.lorem.sentences(3),
+
             links: Array(20).fill(1).map((_, index: number)=> {
 
                 return {
@@ -26,7 +28,8 @@ export const avatars: Array<Avatar> = [
                     avatar: faker.image.people(400, 600),
                     bg_avatar: faker.image.people(400, 600),
                     is_active: index % 7 === 0,
-                    universe: faker.address.country()
+                    universe: faker.address.country(),
+                    bio: faker.lorem.sentences(3),
                 }
             })
 

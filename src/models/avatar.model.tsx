@@ -13,6 +13,7 @@ export interface Avatar {
     link?: string
     avatar?: string
     bg_avatar?: string
+    bio?: string
 
     is_active?: boolean
     status?: AvatarStatus
