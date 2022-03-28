@@ -37,12 +37,12 @@
 
 
 .button_md {
-    padding: .64rem 1.2rem;
+    padding: 1rem 1.2rem;
 
     width: 300px;
     
     @media screen and (min-width: 800px) {
-        font-size: .9rem;
+        font-size: .96rem;
         max-height: 80px;
     }
 
@@ -55,7 +55,15 @@
 .primary_button {
     @extend .button;
 
-    background-image: $PRIMARY_GRADIENT;
+    background-color: $PRIMARY_COLOR;
+    color: $WHITE_COLOR;
+}
+
+.black_button {
+    @extend .button;
+
+    background-color: $BLACK_COLOR;
+    color: $WHITE_COLOR;
 }
 
 
