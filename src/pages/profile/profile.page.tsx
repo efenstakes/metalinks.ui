@@ -1,3 +1,4 @@
+import { Drawer } from '@mui/material'
 import { profile } from 'console'
 import { useState } from 'react'
 
@@ -9,11 +10,15 @@ import LoadingMetalinkCardComponent from '../../components/loading_metalink_card
 import MetalinkCardComponent from '../../components/metalink_card/metalink_card.component'
 import SectionTitleComponent from '../../components/section_title/section_title.component'
 import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
-import { Avatar } from '../../models/avatar.model'
+import AddMetaLinkPage from '../add_link/add_metalink.page'
 
 
 // models
 import { MetaLink } from '../../models/metalink.model'
+import { Avatar } from '../../models/avatar.model'
+
+
+// data
 import { avatars } from '../../models/test.data'
 
 
@@ -23,6 +28,10 @@ import './profile.page.scss'
 
 const ProfilePage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    
+    const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
+    const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
+
 
     const profile: Avatar = avatars[0]
 
@@ -115,6 +124,23 @@ const ProfilePage = () => {
                   </button>
               }
           />
+
+                      
+          <Drawer
+              anchor='right'
+              open={isAddLinkDrawerOpen}
+              onClose={ ()=> setIsAddLinkDrawerOpen(false) }
+          >
+              <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
+          </Drawer>
+
+          <Drawer
+              anchor='right'
+              open={isCreateAvatarDrawerOpen}
+              onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
+          >
+              <AddMetaLinkPage isCreateLink={false} closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } />
+          </Drawer>
 
       </div>
     )

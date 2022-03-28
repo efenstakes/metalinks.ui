@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Dialog, Drawer } from '@mui/material'
+
 // components
 import AppbarComponent from '../../components/appbar/appbar.component'
 import MetalinkCardComponent from '../../components/metalink_card/metalink_card.component'
@@ -7,6 +9,7 @@ import SectionTitleComponent from '../../components/section_title/section_title.
 import WelcomeComponent from './welcome.component'
 import FabComponent from '../../components/fab/fab.component'
 import LoadingMetalinkCardComponent from '../../components/loading_metalink_card/loading_metalink_card.component'
+import AddMetaLinkPage from '../add_link/add_metalink.page'
 
 
 // models
@@ -20,11 +23,17 @@ import './home.page.scss'
 
 const HomePage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
+    const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
+
 
     console.log("avatars ", avatars)
 
 
-    const toggleDrawer = ()=> {}
+    const openCreateMetaLinkDrawer = ()=> {
+        setIsAddLinkDrawerOpen(true)
+    }
+
 
     return (
         <div className='page'>
@@ -65,11 +74,46 @@ const HomePage = () => {
             {/* add link button */}
             <FabComponent
                 children={
-                    <button className="primary_button" onClick={toggleDrawer}>
+                    <button className="primary_button" onClick={openCreateMetaLinkDrawer}>
                         Add a MetaLink
                     </button>
                 }
             />
+
+            
+            <Drawer
+                anchor='right'
+                open={isAddLinkDrawerOpen}
+                onClose={ ()=> setIsAddLinkDrawerOpen(false) }
+            >
+                <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
+            </Drawer>
+            <Drawer
+                anchor='right'
+                open={isCreateAvatarDrawerOpen}
+                onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
+            >
+                <AddMetaLinkPage isCreateLink={false} closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } />
+            </Drawer>
+
+
+            {/* <Dialog open={isAddLinkDrawerOpen} fullScreen>
+                <AddMetaLinkPage 
+                    isCreateLink 
+                    closeDrawer={ 
+                        ()=> setIsAddLinkDrawerOpen(false) 
+                    } 
+                />
+            </Dialog>
+
+            <Dialog open={isCreateAvatarDrawerOpen} fullScreen>
+                <AddMetaLinkPage 
+                    isCreateLink={false} 
+                    closeDrawer={ 
+                        ()=> setIsCreateAvatarDrawerOpen(false) 
+                    } 
+                />
+            </Dialog> */}
 
         </div>
     )
