@@ -7,4 +7,5 @@ export interface MetaLink {
     avatar?: string
     bg_avatar?: string
     is_active?: boolean
+    universe?: string
 }
