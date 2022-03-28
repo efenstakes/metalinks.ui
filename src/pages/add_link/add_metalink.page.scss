@@ -10,3 +10,14 @@
 .add_metalink__button {
     margin: auto;
 }
+
+
+.avatar_display {
+    position: relative;
+
+    aspect-ratio: 4/2;
+
+    background-color: bisque;
+
+    border-radius: $BOX_SHADOW_HOVER_SM;
+}

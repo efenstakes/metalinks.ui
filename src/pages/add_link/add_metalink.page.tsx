@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import { useWindowWidth } from '@react-hook/window-size'
 import clsx from 'clsx'
 
-import { FormControlLabel, FormGroup, Switch } from '@mui/material'
+
+import { FormControlLabel, FormGroup, IconButton, Switch, CircularProgress } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 
 // components
 import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
-import FabComponent from '../../components/fab/fab.component'
 import TextInputComponent from '../../components/inputs/text_input.component'
+import ButtonComponent from '../../button/button.component'
 
 
 // models
@@ -48,16 +50,17 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
 
     console.log("width ", width)
 
-    const logOut = ()=> {
-        closeDrawer()
+    const executeAction = ()=> {
+        
     }
+    
 
 
     useEffect(()=> {
         if( width > 1400 ) {
-            setDrawerSize(30)
+            setDrawerSize(20)
         } else if ( width > 800 && width < 1400 ) {
-            setDrawerSize(50)
+            setDrawerSize(40)
         } else if ( width > 600 && width < 800 ) {
             setDrawerSize(80)
         } else {
@@ -70,17 +73,33 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
       <div 
           className={
               clsx([
-                  [`drawer_${drawerSize}`], 'column', 'ma_center',
-                  'add_metalink'
+                  [`drawer_${drawerSize}`], 
+                  'add_metalink',
+                  'column',
+                  // 'padded_container_xl',
               ])
           } 
       >
 
+        <VSpacerComponent space={1} />
+        {/* <div className="add_metalink__close_container row ma_center">
+          <IconButton size='medium' onClick={closeDrawer}
+            style={{
+              backgroundColor: 'brown',
+              color: 'white'
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div> */}
+        {/* <VSpacerComponent space={4} /> */}
+        
+
         {/* title */}
-        <p className="text_4 bold">
+        <p className="text_4 bold" style={{  marginLeft: '1rem' }}>
           Add MetaLink
         </p>
-        <VSpacerComponent space={4} />
+        <VSpacerComponent space={48} />
 
         {/* name */}
         <TextInputComponent
@@ -96,7 +115,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={2} />
+        <VSpacerComponent space={20} />
 
         
         {/* aka */}
@@ -106,14 +125,14 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
             onChange={ handleFieldChange }
             autoFocus
             labelText='Enter aka'
-            labelWidth={132}
+            labelWidth={80}
             placeholder='Enter aka'
             errorText={metaLinkErrors.aka}
             wrapperStyles={{
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={2} />
+        <VSpacerComponent space={20} />
         
         
         {/* bio */}
@@ -123,7 +142,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
             onChange={ handleFieldChange }
             autoFocus
             labelText='Enter your bio'
-            labelWidth={132}
+            labelWidth={120}
             placeholder='Enter bio'
             errorText={metaLinkErrors.bio}
             wrapperStyles={{
@@ -132,26 +151,64 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
             multiline
             rows={5}
         />
-        <VSpacerComponent space={2} />
+        <VSpacerComponent space={20} />
         
 
         {/* is active */}
-        <FormGroup>
+        <FormGroup style={{  marginLeft: '1rem' }} >
             <FormControlLabel 
                 control={<Switch size='medium' defaultChecked />} 
                 label="Is link active" 
             />
         </FormGroup>
-        <VSpacerComponent space={4} />
+        <VSpacerComponent space={20} />
 
+
+        {/* pick avatar */}
+        <TextInputComponent
+            name='avatar'
+            id='avatar'
+            onChange={ handleFieldChange }
+            autoFocus
+            labelText='Enter your avatar link'
+            labelWidth={164}
+            placeholder='Enter your avatar link'
+            errorText={metaLinkErrors.avatar}
+            wrapperStyles={{
+              ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
+            }}
+        />
+        <VSpacerComponent space={20} />
+
+        {/* pick background avatar */}
+        <TextInputComponent
+            name='bg_avatar'
+            id='bg_avatar'
+            onChange={ handleFieldChange }
+            autoFocus
+            labelText='Enter your background avatar link'
+            labelWidth={260}
+            placeholder='Enter your background avatar link'
+            errorText={metaLinkErrors.bg_avatar}
+            wrapperStyles={{
+              ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
+            }}
+        />
+        <VSpacerComponent space={40} />
 
         {/* add button */}
-        <button className='primary_button add_metalink__button'>
-          {
+        <ButtonComponent 
+          isFlat
+          classes={['primary_button', 'button_lg', 'add_metalink__button']}
+          text={
             isCreateLink ? "Add MetaLink" : "Create Avatar"
           }
-        </button>
-        <VSpacerComponent space={10} />
+          startIcon={
+            <CircularProgress size='small' style={{ fontSize: '.1rem' }} />
+          }
+          onClick={executeAction}
+        />
+        <VSpacerComponent space={20} />
 
       </div>
     )
