@@ -1,4 +1,7 @@
 
+import { useEthers } from '@usedapp/core'
+
+
 import { useWindowWidth } from '@react-hook/window-size'
 
 // components
@@ -14,8 +17,8 @@ import './welcome.component.scss'
 
 const WelcomeComponent = () => {
     let width = useWindowWidth()
-
-    const authenticate = ()=> {}
+    
+    const { activateBrowserWallet, account } = useEthers()
 
 
     return (
@@ -69,12 +72,15 @@ const WelcomeComponent = () => {
                 </p>
                 <VSpacerComponent space={2} />
  
-                <button 
-                    className="black_button button_md bold" 
-                    onClick={authenticate}
-                >
-                    Connect Wallet
-                </button>
+                {
+                    !account &&
+                        <button 
+                            className="black_button button_md bold" 
+                            onClick={activateBrowserWallet}
+                        >
+                            Connect Wallet
+                        </button>
+                }
 
             </div>
 
