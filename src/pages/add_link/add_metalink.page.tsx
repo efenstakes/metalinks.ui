@@ -250,7 +250,9 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               isFlat
               classes={['primary_button', 'button_lg', 'add_metalink__button']}
               text={
-                isCreateLink ? "Add MetaLink" : "Create Avatar"
+                isCreateLink 
+                  ? isLoading ? "Adding Your MetaLink" : "Add MetaLink" 
+                  : isLoading ? "Creating Your Avatar" : "Create Avatar"
               }
               onClick={executeAction}
               startIcon={
