@@ -17,11 +17,24 @@ import './index.scss'
 
 
 
+// setup usedaoo
+import { ChainId, DAppProvider, Config } from '@usedapp/core'
+
+const config: Config = {
+    readOnlyChainId: ChainId.Rinkeby,
+    readOnlyUrls: {
+      [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/657b97c9050a433ebd7e1d203dc0d8f4',
+    },
+} 
+
+
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <DAppProvider config={config}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </DAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
