@@ -1,5 +1,5 @@
 import { utils } from 'ethers'
-import { useCall, useContractFunction  } from '@usedapp/core'
+import { useCall, useContractFunction, useSendTransaction  } from '@usedapp/core'
 import { Contract } from '@ethersproject/contracts'
 
 
@@ -14,25 +14,54 @@ const CONTRACT_ADDRESS = '0x4CF5744CDd62bddc322Be3045F7bd337d65fbaDF'
 
 
 
-export const useCreateAvatar = async (avatarObj: Avatar)=> {
+// export const useCreateAvatar = async (avatarObj: Avatar)=> {
+//     const wethInterface = new utils.Interface(WethAbi.abi)
+//     const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+
+//     // get data
+//     const { name, aka, bio, avatar, bg_avatar } = avatarObj
+
+//     const { sendTransaction, state } = useSendTransaction()
+//     const { status } = state
+
+//     sendTransaction({
+//         to: CONTRACT_ADDRESS,
+//         data: [ name, aka, bio, avatar, bg_avatar ] 
+//     })
+
+//     console.log("status ", status)
+
+//     return status
+// }
+// export const useCreateAvatar = async (avatarObj: Avatar)=> {
+//     const wethInterface = new utils.Interface(WethAbi.abi)
+//     const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+
+//     // get data
+//     const { name, aka, bio, avatar, bg_avatar } = avatarObj
+
+//     const { state, send } = useContractFunction(contract, 'createAvatar', { transactionName: 'createAvatarTransaction' })
+//     const { status } = state
+
+//     // send({
+//     //     value: [ name, aka, bio, avatar, bg_avatar ] 
+//     // })
+
+//     // console.log("status ", status)
+
+//     return { state, send }
+// }
+
+
+export const useCreateAvatar = ()=> {
     const wethInterface = new utils.Interface(WethAbi.abi)
     const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
-
-    // get data
-    const { name, aka, bio, avatar, bg_avatar } = avatarObj
 
     const { state, send } = useContractFunction(contract, 'createAvatar', { transactionName: 'createAvatarTransaction' })
     const { status } = state
 
-    send({
-        value: [ name, aka, bio, avatar, bg_avatar ] 
-    })
-
-    console.log("status ", status)
-
-    return status
+    return { state, send }
 }
-
 
 export const useAvatarID = (address: string)=> {
     const wethInterface = new utils.Interface(WethAbi.abi)
@@ -53,8 +82,8 @@ export const getAvatar = async (id: number)=> {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8'
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
-    // const url = "https://api.thegraph.com/subgraphs/name/efenstakes/metalinks/graphql"
-    const url = "https://api.studio.thegraph.com/query/3138/metalinks/v0.0.1/graphql"
+    const url = "https://api.thegraph.com/subgraphs/name/efenstakes/metalinks/graphql"
+    // const url = "https://api.studio.thegraph.com/query/3138/metalinks/v0.0.1/graphql"
 
     // {
     //     query getAvatar($id: Int!) {
@@ -86,7 +115,7 @@ export const getAvatar = async (id: number)=> {
     try {
         const resp = await fetch(url, {
                 method: 'POST',
-                // mode: 'no-cors',
+                mode: 'no-cors',
                 body: JSON.stringify({
                     query: AVATAR_QUERY,
                     variables: { id }
@@ -96,7 +125,8 @@ export const getAvatar = async (id: number)=> {
                     // 'Access-Control-Allow-Origin': "*"
                 },
             })
-        console.log('resp.data ', resp)
+        const jsn = await resp.json()
+        console.log('resp.data ', jsn)
     } catch(e) {
         console.error('get avatar error ', e)
     }
