@@ -1,5 +1,5 @@
 import { utils } from 'ethers'
-import { useCall, useContractFunction, useSendTransaction  } from '@usedapp/core'
+import { useCall, useContractFunction, useSendTransaction,  } from '@usedapp/core'
 import { Contract } from '@ethersproject/contracts'
 
 
@@ -77,6 +77,30 @@ export const useAvatarID = (address: string)=> {
     return { value, error }
 }
 
+
+export const useAvatarDetails = (id: number | null)=> {
+    // if( !id ) {
+    //     return { value: null, error: null }
+    // }
+
+    try {
+        const wethInterface = new utils.Interface(WethAbi.abi)
+        const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+    
+        const { value, error } = useCall({ 
+            contract,
+            method: 'getAvatar', 
+            args: [ id ] 
+        }) ?? {}
+        console.log("value ", value, " error ", error)
+    
+        return { value, error }
+    } catch (e) {
+        console.log("error in useAvatarDetails ", e)
+    }
+
+    return { value: null, error: null }
+}
 
 export const getAvatar = async (id: number)=> {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8'
