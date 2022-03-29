@@ -3,8 +3,7 @@ import { useWindowWidth } from '@react-hook/window-size'
 import clsx from 'clsx'
 
 
-import { FormControlLabel, FormGroup, IconButton, Switch, CircularProgress } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import { FormControlLabel, FormGroup, Switch, CircularProgress, Alert } from '@mui/material'
 
 
 // components
@@ -17,11 +16,20 @@ import ButtonComponent from '../../button/button.component'
 import { MetaLink } from '../../models/metalink.model'
 
 
-import { EXTRA_LG_FULL_WIDTH_INPUT_STYLES } from '../../styles/common.styles'
+import { TransactionState } from '@usedapp/core'
 
 
+// abi
+import { Avatar } from '../../models/avatar.model'
 
+// services
+import { useCreateAvatar } from '../../services/metalinks.services'
+
+
+// styles
 import './add_metalink.page.scss'
+
+import { EXTRA_LG_FULL_WIDTH_INPUT_STYLES, FULL_WIDTH_BUTTON_STYLES } from '../../styles/common.styles'
 
 
 type ComponentProps = {
@@ -29,15 +37,19 @@ type ComponentProps = {
   isCreateLink: boolean
 }
 const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
-  
+    const { state, send } = useCreateAvatar()
+
     const [drawerSize, setDrawerSize] = useState(80)
     let width = useWindowWidth()
     
     const initialLink: MetaLink = {}
     const initialLinkErrors: MetaLink = {}
-    const [metaLink, setMetaLink] = useState<MetaLink>(initialLink)
-    const [metaLinkErrors, setMetaLinkErrors] = useState<MetaLink>(initialLinkErrors)
+    const [metaLink, setMetaLink] = useState<MetaLink|Avatar>(initialLink)
+    const [metaLinkErrors, setMetaLinkErrors] = useState<MetaLink|Avatar>(initialLinkErrors)
     
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [hasError, setHasError] = useState<boolean>(false)
+    const [isSuccessful, setIsSuccessful] = useState<boolean>(false)
 
     const handleFieldChange = (e)=> {
       setMetaLink(()=> {
@@ -48,25 +60,74 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
     }
 
 
-    console.log("width ", width)
-
     const executeAction = ()=> {
-        
+      let { name, aka, bio, avatar, bg_avatar, } = metaLink  
+
+      if( !name || name.length === 0 ) {
+        setMetaLinkErrors((state)=> {
+          return { ...state, name: "Name cannot be empty" }
+        })
+      }
+      if( name && name.length < 4 ) {
+        setMetaLinkErrors((state)=> {
+          return { ...state, name: "Name should be atleast 4 characters" }
+        })
+      }
+      
+      if( !aka ) aka = ""
+      if( !bio ) bio = ""
+          
+      if( !avatar || avatar.length === 0 ) {
+        setMetaLinkErrors((state)=> {
+          return { ...state, avatar: "Avatar cannot be empty" }
+        })
+      }
+      if( avatar && avatar.length < 5 ) {
+        setMetaLinkErrors((state)=> {
+          return { ...state, avatar: "Avatar should be a valid link" }
+        })
+      }
+
+      if( !bg_avatar || bg_avatar.length === 0 ) {
+        bg_avatar = ""
+      }
+
+      setHasError(false)
+      send( name, aka, bio, avatar, bg_avatar )
+      setIsLoading(true)
     }
     
 
+    useEffect(()=> {
+        let _drawerSz = 20
+        if( width > 1400 ) {
+          _drawerSz = 20
+        } else if ( width > 800 && width <= 1400 ) {
+            _drawerSz = 50
+        } else if ( width >= 560 && width <= 800 ) {
+            _drawerSz = 80
+        } else {
+          _drawerSz = 100
+        }
+
+        // console.log("_drawerSz ", _drawerSz)
+        setDrawerSize(_drawerSz)
+    }, [ width ])
 
     useEffect(()=> {
-        if( width > 1400 ) {
-            setDrawerSize(20)
-        } else if ( width > 800 && width < 1400 ) {
-            setDrawerSize(40)
-        } else if ( width > 600 && width < 800 ) {
-            setDrawerSize(80)
-        } else {
-            setDrawerSize(100)
-        }
-    }, [ width ])
+      // console.log("new state is ", state)
+      // if status --> success, it succeeded
+      // it has receipt -> events --> then args to get data in event,
+      // index [0] is the avatar id
+      if( state.status === "Success" as TransactionState ) {
+        setIsLoading(false)
+        setIsSuccessful(true)
+      }
+      if( state.status === "Fail" as TransactionState ||  state.status === "Exception" as TransactionState ||  state.status === "Fail" as TransactionState ) {
+        setIsLoading(false)
+        setHasError(true)
+      }
+    }, [ state ])
 
 
     return (
@@ -75,31 +136,17 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               clsx([
                   [`drawer_${drawerSize}`], 
                   'add_metalink',
-                  'column',
-                  // 'padded_container_xl',
               ])
           } 
       >
 
-        <VSpacerComponent space={1} />
-        {/* <div className="add_metalink__close_container row ma_center">
-          <IconButton size='medium' onClick={closeDrawer}
-            style={{
-              backgroundColor: 'brown',
-              color: 'white'
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </div> */}
-        {/* <VSpacerComponent space={4} /> */}
-        
+        <VSpacerComponent space={1} />        
 
         {/* title */}
         <p className="text_4 bold" style={{  marginLeft: '1rem' }}>
-          Add MetaLink
+          { isCreateLink ? "Add MetaLink" : "Create Avatar" }
         </p>
-        <VSpacerComponent space={48} />
+        <VSpacerComponent space={3} />
 
         {/* name */}
         <TextInputComponent
@@ -107,15 +154,15 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
             id='name'
             onChange={ handleFieldChange }
             autoFocus
-            labelText='Enter Dao name'
+            labelText='Enter your name'
             labelWidth={132}
-            placeholder='Enter Dao name'
+            placeholder='Enter your name'
             errorText={metaLinkErrors.name}
             wrapperStyles={{
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={20} />
+        <VSpacerComponent space={2} />
 
         
         {/* aka */}
@@ -132,7 +179,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={20} />
+        <VSpacerComponent space={2} />
         
         
         {/* bio */}
@@ -151,7 +198,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
             multiline
             rows={5}
         />
-        <VSpacerComponent space={20} />
+        <VSpacerComponent space={2} />
         
 
         {/* is active */}
@@ -161,7 +208,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
                 label="Is link active" 
             />
         </FormGroup>
-        <VSpacerComponent space={20} />
+        <VSpacerComponent space={2} />
 
 
         {/* pick avatar */}
@@ -178,7 +225,7 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={20} />
+        <VSpacerComponent space={2} />
 
         {/* pick background avatar */}
         <TextInputComponent
@@ -194,21 +241,48 @@ const AddMetaLinkPage = ({ closeDrawer, isCreateLink }: ComponentProps) => {
               ...EXTRA_LG_FULL_WIDTH_INPUT_STYLES,
             }}
         />
-        <VSpacerComponent space={40} />
+        <VSpacerComponent space={4} />
 
         {/* add button */}
-        <ButtonComponent 
-          isFlat
-          classes={['primary_button', 'button_lg', 'add_metalink__button']}
-          text={
-            isCreateLink ? "Add MetaLink" : "Create Avatar"
-          }
-          startIcon={
-            <CircularProgress size='small' style={{ fontSize: '.1rem' }} />
-          }
-          onClick={executeAction}
-        />
-        <VSpacerComponent space={20} />
+        {
+          !isSuccessful &&
+            <ButtonComponent
+              isFlat
+              classes={['primary_button', 'button_lg', 'add_metalink__button']}
+              text={
+                isCreateLink ? "Add MetaLink" : "Create Avatar"
+              }
+              onClick={executeAction}
+              startIcon={
+                isLoading 
+                  ? <CircularProgress size={20} style={{ color: 'white' }} />
+                  : <div />
+              }
+              styles={{
+                ...FULL_WIDTH_BUTTON_STYLES,
+              }}
+            />
+        }
+        {
+          isSuccessful &&
+            <Alert 
+              severity="success"
+              onClose={ ()=> setIsSuccessful(false) }
+            >
+              Your MetaLink avatar has been created, {metaLink.name}.
+            </Alert>
+        }
+        { hasError && <VSpacerComponent space={2} /> }
+        {
+          hasError &&
+            <Alert 
+              severity="error"
+              onClose={ ()=> setHasError(false) }
+            >
+              An error occured while creating your avatar. <br/> Try again {metaLink.name}.
+            </Alert>
+        }
+        <VSpacerComponent space={4} />
 
       </div>
     )

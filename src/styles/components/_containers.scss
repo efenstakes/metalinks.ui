@@ -203,6 +203,11 @@
     }
 }
 
+.drawer_80 {
+    // @extend .drawer;
+    min-width: 80vw;
+}
+
 .drawer_content_wrapper {
     position: absolute;
     height: 100%;
