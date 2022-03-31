@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
+import { useEthers } from '@usedapp/core'
 
 
 import { Drawer, Skeleton } from '@mui/material'
@@ -31,6 +32,10 @@ import './profile.page.scss'
 
 const ProfilePage = () => {
     let { id } = useParams()
+
+    // get logged in address    
+    const { activateBrowserWallet, deactivate, account } = useEthers()
+
     
     const [isLoading, setIsLoading] = useState<boolean>(false)
     
@@ -38,14 +43,29 @@ const ProfilePage = () => {
     const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
 
     const [avatar, setAvatar] = useState<Avatar|null>()
+    const [isMine, setIsMine] = useState<boolean>(false)
     // const profile: Avatar = avatars[0]
 
 
     // get avatar details - avatar & metalinks
     useEffect(()=> {
+      checkIfIOwnAccount()
       getAvatarDetails()
     }, [ id ])
 
+
+    useEffect(()=> {
+      checkIfIOwnAccount()
+    }, [ ])
+
+
+    const checkIfIOwnAccount = ()=> {
+      if( id == account ) {
+        setIsMine(true)
+      } else {
+        setIsMine(false)
+      }
+    }
 
 
     const getAvatarDetails = ()=> {
