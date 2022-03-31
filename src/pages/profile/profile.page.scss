@@ -38,7 +38,7 @@
     min-height: 120px;
 }
 
-.profile_avatars_container__avatar_container__avatar {
+.profile_avatars_container__avatar_container__avatar, .profile_avatars_container__avatar_container__avatar__loading {
     width: 200px;
     height: 200px;
 
@@ -50,6 +50,10 @@
         width: 120px;
         height: 120px;  
     }
+}
+
+.profile_avatars_container__avatar_container__avatar__loading {
+    background-color: beige;
 }
 
 
