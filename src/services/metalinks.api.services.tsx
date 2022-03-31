@@ -1,9 +1,12 @@
 import axios from "axios"
 
 
+import { Avatar } from "../models/avatar.model"
+
+
 
 // get avatar
-export const getAvatarById = async (id: number)=> {
+export const getAvatarById = async (id: number|string): Promise<Avatar|null> => {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8'
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
@@ -51,15 +54,19 @@ export const getAvatarById = async (id: number)=> {
             })
         const jsn = await resp.json()
         console.log('resp.data ', jsn)
+
+        return jsn
     } catch(e) {
         console.error('get avatar error ', e)
     }
+    
+    return null
 }
 
 
 
 // get avatar details by address
-export const getAvatarByAddress = async (address: number)=> {
+export const getAvatarByAddress = async (address: string): Promise<Avatar|null> => {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8'
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
@@ -101,7 +108,11 @@ export const getAvatarByAddress = async (address: number)=> {
             })
         const jsn = await resp.json()
         console.log('resp.data ', jsn)
+
+        return jsn
     } catch(e) {
         console.error('get avatar error ', e)
     }
+
+    return null
 }
