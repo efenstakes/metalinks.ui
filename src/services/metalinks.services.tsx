@@ -58,7 +58,16 @@ export const useCreateAvatar = ()=> {
     const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
 
     const { state, send } = useContractFunction(contract, 'createAvatar', { transactionName: 'createAvatarTransaction' })
-    const { status } = state
+
+    return { state, send }
+}
+
+
+export const useCreateMetaLink = ()=> {
+    const wethInterface = new utils.Interface(WethAbi.abi)
+    const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+
+    const { state, send } = useContractFunction(contract, 'addAvatarMetaLink', { transactionName: 'addAvatarMetaLinkTransaction' })
 
     return { state, send }
 }
@@ -79,35 +88,87 @@ export const useAvatarID = (address: string)=> {
 
 
 export const useAvatarDetails = (id: number | null)=> {
-    // if( !id ) {
-    //     return { value: null, error: null }
-    // }
+    const wethInterface = new utils.Interface(WethAbi.abi)
+    const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
 
-    try {
-        const wethInterface = new utils.Interface(WethAbi.abi)
-        const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
-    
-        const { value, error } = useCall({ 
-            contract,
-            method: 'getAvatar', 
-            args: [ id ] 
-        }) ?? {}
-        console.log("value ", value, " error ", error)
-    
-        return { value, error }
-    } catch (e) {
-        console.log("error in useAvatarDetails ", e)
-    }
+    const { value, error } = useCall({ 
+        contract,
+        method: 'getAvatar', 
+        args: [ id ] 
+    }) ?? {}
+    console.log("value ", value, " error ", error)
 
-    return { value: null, error: null }
+    return { avatar: value, error }
 }
+
+export const useAvatarLinks = (id: number | null)=> {
+    const wethInterface = new utils.Interface(WethAbi.abi)
+    const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+
+    const { value, error } = useCall({ 
+        contract,
+        method: 'getAvatarMetaLinks', 
+        args: [ id ] 
+    }) ?? {}
+    console.log("value ", value, " error ", error)
+
+    return { links: value, error }
+}
+
+
+export const useMetaLinkDetails = (id: number | null)=> {
+    const wethInterface = new utils.Interface(WethAbi.abi)
+    const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
+
+    const { value, error } = useCall({ 
+        contract,
+        method: 'getAvatarMetaLink', 
+        args: [ id ]
+    }) ?? {}
+    console.log("value ", value, " error ", error)
+
+    return { metalink: value, error }
+}
+
+
+
+// get an address id
+const getAvatarId = async (address: string)=> {
+
+}
+
+
+// get an address details
+const getAvatarDetailsByID = async (id: number)=> {
+
+}
+
+
+// get an address details
+const getAvatarDetailsByAddress = async (address: string)=> {
+
+}
+
+
+// get an avatars metalinks ids
+const getAvatarMetaLinkIDs = async (address: string)=> {
+
+}
+
+
+// get an avatars metalinks ids
+const getAvatarMetaLinks = async (address: string)=> {
+
+}
+
+
+
 
 export const getAvatar = async (id: number)=> {
     axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8'
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
-    const url = "https://api.thegraph.com/subgraphs/name/efenstakes/metalinks/graphql"
-    // const url = "https://api.studio.thegraph.com/query/3138/metalinks/v0.0.1/graphql"
+    const url = "https://api.thegraph.com/subgraphs/name/efenstakes/metalinks"
 
     // {
     //     query getAvatar($id: Int!) {
