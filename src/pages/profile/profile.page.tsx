@@ -3,6 +3,9 @@ import { useParams, Navigate } from 'react-router-dom'
 import { useEthers } from '@usedapp/core'
 
 
+import { useQuery, useLazyQuery  } from '@apollo/client'
+
+
 import { Drawer, Skeleton } from '@mui/material'
 
 
@@ -25,13 +28,29 @@ import { Avatar } from '../../models/avatar.model'
 // services
 import { getAvatarByAddress, getAvatarById } from '../../services/metalinks.api.services'
 
+// queries
+import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY, GET_AVATAR_DETAILS_BY_ID_QUERY } from '../../services/queries.graph'
+
 
 // styles
 import './profile.page.scss'
 
 
+const isQueryParamID = (id: string): boolean => {
+  if( id && isNaN(parseInt(id)) ) {
+    return false
+  } else {
+    return true
+  }
+}
 const ProfilePage = () => {
     let { id } = useParams()
+
+
+    // query the graph for profile
+    const { loading, error, data } = useQuery(
+      isQueryParamID(id) ? GET_AVATAR_DETAILS_BY_ID_QUERY : GET_AVATAR_DETAILS_BY_ADDRESS_QUERY
+    )
 
     // get logged in address    
     const { activateBrowserWallet, deactivate, account } = useEthers()
@@ -69,7 +88,7 @@ const ProfilePage = () => {
 
 
     const getAvatarDetails = ()=> {
-      if( id && isNaN(parseInt(id)) ) {
+      if( isQueryParamID(id) ) {
         console.log("get profile with addess ", id)
         getByAddress(id)
       } else {
@@ -98,7 +117,7 @@ const ProfilePage = () => {
 
 
 
-
+    console.log("loading, error, data ", loading, error, data)
     // if no id, go to home page
     if( !id ) {
       <Navigate to="/" />
