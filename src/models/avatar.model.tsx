@@ -19,4 +19,33 @@ export interface Avatar {
     status?: AvatarStatus
 
     links?: Array<MetaLink>
+
+    addresses?: Array<string>
+}
+
+
+
+export const toAvatar = (avatarData): Avatar => {
+    return {
+        id: avatarData?.id,
+        name: avatarData?.name,
+        aka: avatarData?.aka,
+        bio: avatarData?.bio,
+        avatar: avatarData?.avatarURI,
+        bg_avatar: avatarData?.bgAvatarURI,
+        addresses: avatarData.addresses,
+
+        links: avatarData?.links.map((lik)=> {
+            return {
+                id: lik?.id,
+                name: lik?.name,
+                aka: lik?.aka,
+                bio: lik?.bio,
+                universe: lik?.universe?.name,
+                avatar: lik?.avatarURI,
+                bg_avatar: lik?.bgAvatarURI,
+                link: lik?.link,
+            }
+        }),
+    }
 }
