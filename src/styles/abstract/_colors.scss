@@ -30,14 +30,14 @@ $ERROR_COLOR_OPACITY: rgba(242, 53, 53, .6);
 @for $index from 1 to 12 {
     .g_bg_ps_#{$index} {
         background-image: linear-gradient( calc(#{$index}30deg), $SECONDARY_COLOR, $PRIMARY_COLOR );
-        color: rgba(30, 30, 30, .9);
+        color: wheat;
     } 
 }
 
 @for $index from 1 to 12 {
     .g_bg_sp_#{$index} {
         background-image: linear-gradient( calc(#{$index}30deg), $PRIMARY_COLOR, $SECONDARY_COLOR );
-        color: rgba(30, 30, 30, .9);
+        color: wheat;
     } 
 }
 
