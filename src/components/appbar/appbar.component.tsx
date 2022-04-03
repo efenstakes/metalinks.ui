@@ -1,52 +1,87 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useEthers } from '@usedapp/core'
-
-
-import { utils } from 'ethers'
+import { useLazyQuery } from '@apollo/client'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 import Identicon from 'react-identicons'
 
 
-// components
-
-
+// assets
 import logo_img from '../../assets/images/face-small.png'
+
+
+// models
+import { Avatar, toAvatar } from '../../models/avatar.model'
+import { StoreState } from '../../models/store.models'
+
+// queries
+import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY } from '../../services/queries.graph'
+
+// actions
+import { logout_action, set_profile_action } from '../../store/actions/profile.actions'
+
 
 
 import './appbar.component.scss'
 
 
-
-// abi
-import { useAvatarDetails, useAvatarID } from '../../services/metalinks.services'
-import { Avatar } from '../../models/avatar.model'
-
-
-
 type ComponentProps = {
 }
 const AppbarComponent = ({ }: ComponentProps) => {
+    const dispatch = useDispatch()
+
     const { activateBrowserWallet, deactivate, account } = useEthers()
-
-
-    const { value, error } = useAvatarID(account)
-    const detailResult = ""
-    // const detailResult = useAvatarDetails(value)
     
-    // console.log("value ", value, " error ", error)
-    // console.log("detailResult ", detailResult)
+    const [getMyProfile, getMyProfileResult] = useLazyQuery(GET_AVATAR_DETAILS_BY_ADDRESS_QUERY)
+
+
+    // get data from redux
+    const avatar: Avatar = useSelector((state: StoreState)=> state?.profile?.avatar)
+
     
     // when a user logs in, get their avatar id, then 
     // fetch their data from the graph api
     useEffect(()=> {
-        console.log("account ", account)
-        console.log("detailResult ", detailResult)
-        if( account ) {
-            console.log("getting profile with id ", value)
-            // send(utils.parseUnits(value).toBigInt().toString())
+        if( account && avatar ) return
+
+        // reset account
+        if( !account ) {
+            dispatch(logout_action())
         }
-    }, [ account, detailResult ])
+
+        console.log("account ", account)
+        console.log("detailResult ", getMyProfileResult)
+
+        // if we have account but no avatar
+        if( account && !avatar ) {
+            console.log("getting profile with address ", account)
+            getMyProfile({
+                variables: { address: account }
+            })
+        }
+    }, [ account, getMyProfileResult ])
+    
+    useEffect(()=> {
+        if( getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
+            dispatch(set_profile_action(toAvatar(getMyProfileResult.data.avatars[0])))
+        }
+    }, [ getMyProfileResult ])
+
+
+    useEffect(()=> {
+        if( avatar ) {
+            console.info("appbar --> avatar ", avatar)
+            return
+        }
+        console.log("account ", account)
+        if( account ) {
+            console.log("getting profile with id ", account)
+            getMyProfile({
+                variables: { address: account }
+            })
+        }
+    }, [ ])
 
 
     return (
@@ -62,7 +97,6 @@ const AppbarComponent = ({ }: ComponentProps) => {
                     MetaLinks
                 </p>
             </div>
-
             
             {/* connect wallet if not logged in */}
             {
@@ -77,7 +111,11 @@ const AppbarComponent = ({ }: ComponentProps) => {
 
             {/* show icon & name */}
             {
-                account && <AvatarComponent address={account} />
+                account && 
+                    <AvatarComponent 
+                        address={account} 
+                        avatar={avatar}
+                    />
             }
             
 
@@ -89,49 +127,26 @@ const AppbarComponent = ({ }: ComponentProps) => {
 
 type AvatarComponentProps = {
     address: string
+    avatar: Avatar | null
 }
-const AvatarComponent = ({ address }: AvatarComponentProps)=> {
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [avatar, setAvatar] = useState<Avatar | null>()
-
-    // get profile data here
-    useEffect(()=> {
-        // console.log("try get profile")
-        getProfile()
-    }, [ ])
-
-    // get profile data here
-    useEffect(()=> {
-        // console.log("try get profile")
-        if( address && address.length ) {
-            getProfile()
-        } else {
-            setAvatar(null)
-        }
-    }, [ address ])
-    
-    // get profile data here
-    const getProfile = async ()=> {
-        if( address && address.length ) {
-            setIsLoading(true)
-        }
-    }
-
+const AvatarComponent = ({ address, avatar }: AvatarComponentProps)=> {
 
     if ( avatar ) {
-        <a href={`/profile/${address}`} className="main_appbar__right_container row ma_center ca_center">
-            <img
-                src={avatar?.avatar} 
-                alt="profile avatar" 
-                className="main_appbar__right_container__image" 
-            />
-            <p className="text_6 bold main_appbar__right_container__text">
-                { avatar && avatar.name.slice(0, 3) }
-            </p>
-        </a>
+        return (
+            <a href='/me' className="main_appbar__right_container row ma_center ca_center">
+                <img
+                    src={avatar?.avatar} 
+                    alt="profile avatar" 
+                    className="main_appbar__right_container__image" 
+                />
+                <p className="text_6 bold main_appbar__right_container__text">
+                    { avatar && avatar.name.slice(0, 3) }
+                </p>
+            </a>
+        )
     }
     return (
-        <a href={`/profile/${address}`} className="main_appbar__right_container row ma_center ca_center">
+        <a href='/me' className="main_appbar__right_container row ma_center ca_center">
             <Identicon 
                 string={address} 
                 size={20} 
