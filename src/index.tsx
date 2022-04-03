@@ -1,25 +1,43 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+
+// theme
 import { ThemeProvider } from '@mui/material'
+
+// redux
+import { Provider as ReduxProvider } from 'react-redux'
+
+
+// apollo
+import {
+  ApolloClient, InMemoryCache, ApolloProvider
+} from "@apollo/client"
+
 
 
 import reportWebVitals from './reportWebVitals'
 
-
+// app
 import App from './App'
 
+// redux setup
+import store from './store/index'
 
 // material ui setup
 import theme from './styles/theme'
 
+
+// styles
 import './index.scss'
 
 
 
-// setup usedaoo
+// setup usedapp
 import { ChainId, DAppProvider, Config } from '@usedapp/core'
 
+
+// blockchain config
 const config: Config = {
     readOnlyChainId: ChainId.Rinkeby,
     readOnlyUrls: {
@@ -27,14 +45,23 @@ const config: Config = {
     },
 } 
 
+// graphql config
+const client = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/efenstakes/metalinks',
+  cache: new InMemoryCache()
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <DAppProvider config={config}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </DAppProvider>
+    <ReduxProvider store={store}>
+      <ApolloProvider client={client}>
+        <DAppProvider config={config}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </DAppProvider>
+      </ApolloProvider>
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
