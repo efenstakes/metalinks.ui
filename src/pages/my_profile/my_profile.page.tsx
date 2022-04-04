@@ -21,6 +21,7 @@ import AddMetaLinkPage from '../add_link/add_metalink.page'
 import NotLoggedInComponent from '../../components/no_account/not_logged_in.component'
 import ProfileLoadingPage from '../profile_loading/profile_loading.page'
 import ErrorLoadingAvatarComponent from '../../components/no_account/error_loading.component'
+import NoLinksComponent from '../../components/no_links/no_links.component'
 
 
 // models
@@ -62,18 +63,19 @@ const MyProfilePage = () => {
 
     // get avatar details - avatar & metalinks
     useEffect(()=> {
-      if( account ) {
-          console.log("get profile of adrss ", account)
+      if( account && !avatar ) {
+        console.log("get profile of adrss ", account)
         getMyProfile({
             variables: { address: account },
         })
       } else {
-         console.log("no accnt }, useEffect([ account ]) ") 
+        console.log("no accnt }, useEffect([ account ]) ") 
       }
     }, [ account ])
 
+    // only set avatar if its not set
     useEffect(()=> {
-        if( getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
+        if( !avatar && getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
             dispatch(set_profile_action(toAvatar(getMyProfileResult.data.avatars[0])))
         }
     }, [ getMyProfileResult ])
@@ -90,7 +92,7 @@ const MyProfilePage = () => {
     }, [ ])
 
 
-    const refreshProfile = ()=> {
+    const refreshAvatar = ()=> {
         getMyProfile({
             variables: { account },
         })
@@ -121,19 +123,14 @@ const MyProfilePage = () => {
     }
 
     // when loading
-    if( getMyProfileResult.loading ) {
+    if( !avatar && getMyProfileResult.loading ) {
       return (  
         <ProfileLoadingPage />
       )
     }
 
     // no account
-    if(
-        getMyProfileResult.error || 
-        !getMyProfileResult.data || 
-        !getMyProfileResult.data?.avatars || 
-        (getMyProfileResult.data && getMyProfileResult.data.avatars?.length == 0)
-    ) {
+    if( !avatar && getMyProfileResult.error ) {
         console.log("no account")
         return (
             <div className='page'>
@@ -143,7 +140,7 @@ const MyProfilePage = () => {
                 <VSpacerComponent space={10} />
 
                 <div className="padded_container_lg">
-                    <ErrorLoadingAvatarComponent refresh={refreshProfile} />
+                    <ErrorLoadingAvatarComponent refresh={refreshAvatar} />
                 </div>
 
             </div>
@@ -152,9 +149,11 @@ const MyProfilePage = () => {
     
     // no error but no account either
     if(
-        !getMyProfileResult.error && getMyProfileResult.data &&
+        !avatar && 
+        !getMyProfileResult.error && 
+        getMyProfileResult.data &&
         getMyProfileResult.data?.avatars &&
-        getMyProfileResult.data.avatars?.length > 0
+        getMyProfileResult.data.avatars?.length === 0
     ) {
         console.log("no error but no account either")
         return (
@@ -168,7 +167,7 @@ const MyProfilePage = () => {
                     <ErrorLoadingAvatarComponent 
                         title="No Account"
                         text="Account was not found."
-                        refresh={refreshProfile} 
+                        refresh={refreshAvatar} 
                         hideCta
                     />
                 </div>
@@ -225,17 +224,17 @@ const MyProfilePage = () => {
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
                 {/* Links */}
-                <div className="chip_md chip_primary_outlined">
+                <div className="chip_md chip_primary_outlined text_6">
                     { avatar?.links.length } Links
                 </div>
 
                 {/* Universes */}
-                <div className="chip_md chip_primary_outlined">
+                <div className="chip_md chip_primary_outlined text_6">
                     { avatar?.links.length } Universes
                 </div>
 
                 {/* Addresses */}
-                <div className="chip_md chip_primary_outlined">
+                <div className="chip_md chip_primary_outlined text_6">
                     { avatar?.addresses.length } Addresses
                 </div>
 
@@ -245,19 +244,29 @@ const MyProfilePage = () => {
           <VSpacerComponent space={6} />
 
           {/* metalinks if any */}
-          <SectionTitleComponent title='Links' />
-          <div className="padded_container">
-              {
-                  avatar?.links.map((metaLink: MetaLink, index: number)=> {
+          {  
+            avatar?.links.length > 0 && 
+                <SectionTitleComponent title='My Links' /> 
+          }
+          <div className="padded_container_lg">
 
-                      return (
-                          <MetalinkCardComponent
-                              key={index}
-                              metaLink={metaLink}
-                          />
-                      )
-                  })
-              }
+                {
+                    avatar?.links.map((metaLink: MetaLink, index: number)=> {
+
+                        return (
+                            <MetalinkCardComponent
+                                key={index}
+                                metaLink={metaLink}
+                            />
+                        )
+                    })
+                }
+                {
+                    avatar && avatar?.links.length === 0 &&
+                        <NoLinksComponent
+                            text={`${avatar?.name} has not added any MetaLinks yet.`}
+                        />
+                }
           </div>
               
           {/* add link button */}
@@ -283,7 +292,11 @@ const MyProfilePage = () => {
               open={isCreateAvatarDrawerOpen}
               onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
           >
-              <AddMetaLinkPage isCreateLink={false} closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } />
+              <AddMetaLinkPage 
+                isCreateLink={false} 
+                closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } 
+                reload={refreshAvatar}
+            />
           </Drawer>
 
       </div>
