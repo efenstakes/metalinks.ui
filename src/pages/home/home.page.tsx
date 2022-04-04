@@ -14,20 +14,24 @@ import WelcomeComponent from './welcome.component'
 import FabComponent from '../../components/fab/fab.component'
 import LoadingMetalinkCardComponent from '../../components/loading_metalink_card/loading_metalink_card.component'
 import AddMetaLinkPage from '../add_link/add_metalink.page'
+import NoLinksComponent from '../../components/no_links/no_links.component'
+import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
 
 
 // models
 import { Avatar, toAvatar } from '../../models/avatar.model'
 import { MetaLink } from '../../models/metalink.model'
-import { avatars } from '../../models/test.data'
+import { StoreState } from '../../models/store.models'
 
 // queries
 import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY } from '../../services/queries.graph'
 
 
-import './home.page.scss'
+// redux actions
 import { set_profile_action } from '../../store/actions/profile.actions'
-import { StoreState } from '../../models/store.models'
+
+
+import './home.page.scss'
 
 
 const HomePage = () => {  
@@ -49,8 +53,6 @@ const HomePage = () => {
     const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
     const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
 
-
-    console.log("avatars ", avatars)
 
 
     // get avatar details - avatar & metalinks
@@ -103,10 +105,12 @@ const HomePage = () => {
             <WelcomeComponent />
 
             {/* metalinks if any */}
-            <SectionTitleComponent title='Links' />
+            {
+                avatar?.links.length > 0 && <SectionTitleComponent title='Links' />
+            }
             <div className="padded_container">
                 { !getMyAvatarResult.loading &&
-                    avatars[0].links.map((metaLink: MetaLink, index: number)=> {
+                    avatar?.links.map((metaLink: MetaLink, index: number)=> {
 
                         return (
                             <MetalinkCardComponent
@@ -127,8 +131,16 @@ const HomePage = () => {
                         )
                     })
                 }
+                {
+                    !getMyAvatarResult.loading && 
+                     avatar &&
+                     avatar?.links.length === 0 &&
+                        <NoLinksComponent
+                            text='You have not added any MetaLinks yet. Click on Add MetaLinks button to add one.'
+                        />
+                }
             </div>
-
+            <VSpacerComponent space={5} />
 
             {/* add link button */}
             {
