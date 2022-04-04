@@ -56,7 +56,7 @@ const ProfileLoadingPage = () => {
 
             {/* metalinks if any */}
             <SectionTitleComponent title='Links' />
-            <div className="padded_container">
+            <div className="padded_container_lg">
                 { 
                     Array(6).fill(0).map((_, index: number)=> {
 
