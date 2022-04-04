@@ -45,13 +45,13 @@ const AppbarComponent = ({ }: ComponentProps) => {
     useEffect(()=> {
         if( account && avatar ) return
 
-        // reset account
-        if( !account ) {
+        // reset account only if avatar is not null
+        if( !account && avatar && avatar?.id ) {
             dispatch(logout_action())
         }
 
-        console.log("account ", account)
-        console.log("detailResult ", getMyProfileResult)
+        // console.log("account ", account)
+        // console.log("detailResult ", getMyProfileResult)
 
         // if we have account but no avatar
         if( account && !avatar ) {
@@ -63,7 +63,8 @@ const AppbarComponent = ({ }: ComponentProps) => {
     }, [ account, getMyProfileResult ])
     
     useEffect(()=> {
-        if( getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
+        // set avatar only if avatar is not set
+        if( !avatar && getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
             dispatch(set_profile_action(toAvatar(getMyProfileResult.data.avatars[0])))
         }
     }, [ getMyProfileResult ])
@@ -71,12 +72,12 @@ const AppbarComponent = ({ }: ComponentProps) => {
 
     useEffect(()=> {
         if( avatar ) {
-            console.info("appbar --> avatar ", avatar)
+            // console.info("appbar --> avatar ", avatar)
             return
         }
-        console.log("account ", account)
+        // console.log("account ", account)
         if( account ) {
-            console.log("getting profile with id ", account)
+            // console.log("getting profile with id ", account)
             getMyProfile({
                 variables: { address: account }
             })
