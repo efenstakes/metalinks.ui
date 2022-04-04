@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { useEthers } from '@usedapp/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 import { useLazyQuery  } from '@apollo/client'
@@ -26,6 +26,7 @@ import ErrorLoadingAvatarComponent from '../../components/no_account/error_loadi
 // models
 import { MetaLink } from '../../models/metalink.model'
 import { Avatar, toAvatar } from '../../models/avatar.model'
+import { StoreState } from '../../models/store.models'
 
 
 // redux actions
@@ -45,6 +46,10 @@ import './my_profile.page.scss'
 const MyProfilePage = () => {
     const dispatch = useDispatch()
 
+    // get data from redux
+    let avatar: Avatar | null = useSelector((state: StoreState)=> state?.profile?.avatar)
+
+    
     // get logged in address    
     const { deactivate, account } = useEthers()
     
@@ -74,7 +79,7 @@ const MyProfilePage = () => {
     }, [ getMyProfileResult ])
 
     useEffect(()=> {
-        if( account ) {
+        if( account && !avatar ) {
             console.log("get profile of adrss ", account)
             getMyProfile({
                 variables: { address: account },
@@ -173,7 +178,7 @@ const MyProfilePage = () => {
     }
 
     // we have avatar, show it
-    const avatar: Avatar = toAvatar(getMyProfileResult.data?.avatars[0])
+    avatar = toAvatar(getMyProfileResult.data?.avatars[0] || avatar)
     console.log("avatar ", avatar)
     return (
       <div className='page'>
