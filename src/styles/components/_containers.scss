@@ -122,14 +122,14 @@
     
 
     &:hover {
-        background-image: radial-gradient(
-            circle, 
-            rgba(242, 184, 75, .5), 
-            rgba(251, 101, 66, .3),
-            rgba(30, 30, 30, .0),
-            rgba(30, 30, 30, .0)
-        );
-        background-size: 60%;
+        // background-image: radial-gradient(
+        //     circle, 
+        //     rgba(242, 184, 75, .5), 
+        //     rgba(251, 101, 66, .3),
+        //     rgba(30, 30, 30, .0),
+        //     rgba(30, 30, 30, .0)
+        // );
+        // background-size: 60%;
         
         @media screen and (max-width: 800px) {
             background-size: 100%;
