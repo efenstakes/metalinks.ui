@@ -1,3 +1,6 @@
+import clsx from 'clsx'
+
+
 // models
 import { MetaLink } from '../../models/metalink.model'
 import VSpacerComponent from '../v_spacer/v_spacer.component'
@@ -10,10 +13,17 @@ import './metalink_card.component.scss'
 
 type ComponentProps = {
   metaLink: MetaLink
+  animationIndex: number
 }
-const MetalinkCardComponent = ({ metaLink }: ComponentProps) => {
+const MetalinkCardComponent = ({ metaLink, animationIndex }: ComponentProps) => {
   return (
-    <div className='metalink_card paper_sm clickable row'>
+    <div className={
+          clsx([
+            'metalink_card', 'paper_sm', 'clickable', 'row',
+            [`su_${animationIndex}`]
+          ])
+      }
+    >
 
       {/* image */}
       <div className="metalink_card__image_container">
