@@ -62,6 +62,7 @@ const ProfileLoadingPage = () => {
 
                         return (
                             <LoadingMetalinkCardComponent
+                                key={index} 
                                 animationIndex={index+12+2}
                             />
                         )
