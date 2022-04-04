@@ -1,32 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
+
 import { useEthers } from '@usedapp/core'
-
-
 import { useQuery, useLazyQuery  } from '@apollo/client'
-
-
-import { Drawer, Skeleton } from '@mui/material'
-
 
 
 // components
 import AppbarComponent from '../../components/appbar/appbar.component'
-import FabComponent from '../../components/fab/fab.component'
-import LoadingMetalinkCardComponent from '../../components/loading_metalink_card/loading_metalink_card.component'
 import MetalinkCardComponent from '../../components/metalink_card/metalink_card.component'
 import SectionTitleComponent from '../../components/section_title/section_title.component'
 import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
-import AddMetaLinkPage from '../add_link/add_metalink.page'
+import ProfileLoadingPage from '../profile_loading/profile_loading.page'
+import ErrorLoadingAvatarComponent from '../../components/no_account/error_loading.component'
 
 
 // models
 import { MetaLink } from '../../models/metalink.model'
-import { Avatar } from '../../models/avatar.model'
-
-
-// services
-import { getAvatarByAddress, getAvatarById } from '../../services/metalinks.api.services'
+import { Avatar, toAvatar } from '../../models/avatar.model'
 
 // queries
 import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY, GET_AVATAR_DETAILS_BY_ID_QUERY } from '../../services/queries.graph'
@@ -37,151 +27,119 @@ import './profile.page.scss'
 
 
 const isQueryParamID = (id: string): boolean => {
-  if( id && isNaN(parseInt(id)) ) {
+  if( id && id.length > 10 && id.startsWith('0x') ) {
     return false
   } else {
     return true
   }
 }
+type ByID = {
+  id: string
+}
+type ByAddress = {
+  address: string
+}
+type QueryParams = {
+  params: ByID | ByAddress
+}
 const ProfilePage = () => {
     let { id } = useParams()
+    let isID: boolean = isQueryParamID(id as string)
 
-
-    // query the graph for profile
-    const { loading, error, data } = useQuery(
-      isQueryParamID(id) ? GET_AVATAR_DETAILS_BY_ID_QUERY : GET_AVATAR_DETAILS_BY_ADDRESS_QUERY
-    )
+    console.log("isID ", isID, " id ", id)
 
     // get logged in address    
-    const { activateBrowserWallet, deactivate, account } = useEthers()
-
+    const { account } = useEthers()
     
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    
-    const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
-    const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
+    // query the graph for profile
+    const qParams: ByID | ByAddress = isID ? { id: id as string } : { address: id }
+    const { loading, error, data, refetch } = useQuery(
+      isID ? GET_AVATAR_DETAILS_BY_ID_QUERY : GET_AVATAR_DETAILS_BY_ADDRESS_QUERY,
+      {
+        variables: qParams
+      }
+    )
 
-    const [avatar, setAvatar] = useState<Avatar|null>()
-    const [isMine, setIsMine] = useState<boolean>(false)
-    // const profile: Avatar = avatars[0]
-
-
-    // get avatar details - avatar & metalinks
     useEffect(()=> {
-      checkIfIOwnAccount()
-      getAvatarDetails()
+      refreshProfile()
     }, [ id ])
 
 
-    useEffect(()=> {
-      checkIfIOwnAccount()
-    }, [ ])
-
-
-    const checkIfIOwnAccount = ()=> {
-      if( id == account ) {
-        setIsMine(true)
-      } else {
-        setIsMine(false)
-      }
+    const refreshProfile = ()=> {
+      const params: ByID | ByAddress = isID ? { id: id as string } : { address: id as string }
+      // refetch()
+      console.log("b4 refetch({ ...params })", params)
+      refetch({ ...params })
+      console.log("after refetch({ ...params })", params)
     }
-
-
-    const getAvatarDetails = ()=> {
-      if( isQueryParamID(id) ) {
-        console.log("get profile with addess ", id)
-        getByAddress(id)
-      } else {
-        console.log("get profile by id ", id)
-        getByID(id)
-      }
-    }
-    
-    const getByAddress = async (id: string)=> {
-      setIsLoading(true)
-      const avatr: Avatar = await getAvatarByAddress(id) 
-      setAvatar(avatr)
-      setIsLoading(false)
-    }
-    
-    const getByID = async (id: string | number)=> {
-      setIsLoading(true)
-      const avatr: Avatar = await getAvatarById(id) 
-      setAvatar(avatr)
-      setIsLoading(false)
-    }
-
-
-    const toggleDrawer = ()=> {}
-
-
 
 
     console.log("loading, error, data ", loading, error, data)
     // if no id, go to home page
     if( !id ) {
-      <Navigate to="/" />
-    }
-    if( isLoading ) {
-      return (  
-        <div className='page'>
-                      
-          {/* appbar */}
-          <AppbarComponent />
-
-          {/* avatars */}
-          <div className="profile_avatars_container">
-
-            <Skeleton 
-              className="profile_avatars_container__avatar_container__big_avatar absolute"
-              width="100%" height={400}
-            />
-
-            <div className="profile_avatars_container__avatar_container absolute row ma_center ca_center">
-              <div
-                className="profile_avatars_container__avatar_container__avatar__loading" 
-              />
-            </div>
-
-          </div>
-          <VSpacerComponent space={1} />
-
-          <div className="column ca_center profile_info_container">
-
-            <Skeleton width="48%" height={20} />
-            <VSpacerComponent space={.5} />
-
-            <Skeleton width="32%" height={16} />
-            <VSpacerComponent space={1.5} />
-
-            <div className="row ma_evenly ca_center profile_info_container__chips">
-
-              <Skeleton width="30%" height={16} />
-              <Skeleton width="30%" height={16} />
-
-            </div>
-
-          </div>
-          <VSpacerComponent space={6} />
-
-          {/* metalinks if any */}
-          <SectionTitleComponent title='Links' />
-          <div className="padded_container">
-              { 
-                  Array(6).fill(0).map((_, index: number)=> {
-
-                      return (
-                          <LoadingMetalinkCardComponent
-                              animationIndex={index+12+2}
-                          />
-                      )
-                  })
-              }
-          </div>
-
-        </div>
+      return (
+        <Navigate to="/" />
       )
     }
+    if( loading ) {
+      return (
+        <ProfileLoadingPage />
+      )
+    }
+
+    // error account
+    if( error ) {
+        console.log("error account")
+        return (
+            <div className='page'>
+            
+                {/* appbar */}
+                <AppbarComponent />
+                <VSpacerComponent space={10} />
+
+                <div className="padded_container_lg">
+                    <ErrorLoadingAvatarComponent refresh={refreshProfile} />
+                </div>
+
+            </div>
+        )
+    }
+    
+    // no error but no account either
+    if(
+        !error &&
+        (
+          !data ||
+          (isID && !data?.avatar) || 
+          (!isID && !data?.avatars) || 
+          (!isID && data?.avatars?.length === 0)
+        )
+    ) {
+        console.log("no error but no account either")
+        return (
+            <div className='page'>
+            
+                {/* appbar */}
+                <AppbarComponent />
+                <VSpacerComponent space={10} />
+
+                <div className="padded_container_lg">
+                    <ErrorLoadingAvatarComponent 
+                        title="Avatar Not Found"
+                        text="Avatar you are searching was not found. Check the id or address."
+                        refresh={refreshProfile} 
+                        hideCta
+                    />
+                </div>
+
+            </div>
+        )
+    }
+
+    // get the avatar from result
+    const avatar: Avatar = toAvatar(
+      isID ? data?.avatar : data?.avatars[0]
+    )
     return (
       <div className='page'>
                   
@@ -212,22 +170,31 @@ const ProfilePage = () => {
           <div className="column ca_center profile_info_container">
 
             <p className="text_3 bold">
-              { avatar.name }
+              { avatar?.name }
             </p>
             <VSpacerComponent space={.5} />
 
             <p className="text_7 profile_info_container__bio">
-              { avatar.bio }
+              { avatar?.bio }
             </p>
             <VSpacerComponent space={1.5} />
 
+            {/* meta info */}
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
+              {/* Links */}
               <div className="chip_md chip_primary_outlined">
                 { avatar?.links.length } Links
               </div>
+
+              {/* Universes */}
               <div className="chip_md chip_primary_outlined">
                 { avatar?.links.length } Universes
+              </div>
+
+              {/* Addresses */}
+              <div className="chip_md chip_primary_outlined">
+                  { avatar?.addresses.length } Addresses
               </div>
 
             </div>
@@ -238,7 +205,7 @@ const ProfilePage = () => {
           {/* metalinks if any */}
           <SectionTitleComponent title='Links' />
           <div className="padded_container">
-              { ! isLoading &&
+              {
                   avatar?.links.map((metaLink: MetaLink, index: number)=> {
 
                       return (
@@ -250,33 +217,7 @@ const ProfilePage = () => {
                   })
               }
           </div>
-              
-          {/* add link button */}
-          <FabComponent
-              children={
-                  <button className="primary_button" onClick={toggleDrawer}>
-                      Add a MetaLink
-                  </button>
-              }
-          />
-
-                      
-          <Drawer
-              anchor='right'
-              open={isAddLinkDrawerOpen}
-              onClose={ ()=> setIsAddLinkDrawerOpen(false) }
-          >
-              <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
-          </Drawer>
-
-          <Drawer
-              anchor='right'
-              open={isCreateAvatarDrawerOpen}
-              onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
-          >
-              <AddMetaLinkPage isCreateLink={false} closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } />
-          </Drawer>
-
+            
       </div>
     )
 }
