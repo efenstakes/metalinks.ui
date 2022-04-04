@@ -3,7 +3,7 @@ import { gql } from "@apollo/client"
 
 export const GET_AVATAR_DETAILS_BY_ID_QUERY = gql`
     query getAvatarByID($id: ID!) {
-        avatars( id: $id ) {
+        avatar( id: $id ) {
             id
             name
             aka
