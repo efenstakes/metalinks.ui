@@ -28,8 +28,9 @@ import { MetaLink } from '../../models/metalink.model'
 import { Avatar, toAvatar } from '../../models/avatar.model'
 
 
-// services
-import { getAvatarByAddress, getAvatarById } from '../../services/metalinks.api.services'
+// redux actions
+import { set_profile_action } from '../../store/actions/profile.actions'
+
 
 // queries
 import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY, GET_AVATAR_DETAILS_BY_ID_QUERY } from '../../services/queries.graph'
@@ -38,7 +39,6 @@ import { GET_AVATAR_DETAILS_BY_ADDRESS_QUERY, GET_AVATAR_DETAILS_BY_ID_QUERY } f
 // styles
 import '../profile/profile.page.scss'
 import './my_profile.page.scss'
-import { set_profile_action } from '../../store/actions/profile.actions'
 
 
 
@@ -96,14 +96,8 @@ const MyProfilePage = () => {
 
     console.log("getMyProfileResult ", getMyProfileResult)
     
-    return (
-        <div className='page'>
-            
-            {/* appbar */}
-            <AppbarComponent />
-            
-        </div>
-    )
+
+
     // if no id, go to home page
     if( !account ) {
       return (
@@ -133,7 +127,7 @@ const MyProfilePage = () => {
         getMyProfileResult.error || 
         !getMyProfileResult.data || 
         !getMyProfileResult.data?.avatars || 
-        (getMyProfileResult.data && getMyProfileResult.data.avatar?.length == 0)
+        (getMyProfileResult.data && getMyProfileResult.data.avatars?.length == 0)
     ) {
         console.log("no account")
         return (
@@ -155,7 +149,7 @@ const MyProfilePage = () => {
     if(
         !getMyProfileResult.error && getMyProfileResult.data &&
         getMyProfileResult.data?.avatars &&
-        getMyProfileResult.data.avatar?.length > 0
+        getMyProfileResult.data.avatars?.length > 0
     ) {
         console.log("no error but no account either")
         return (
@@ -212,16 +206,17 @@ const MyProfilePage = () => {
 
             {/* name */}
             <p className="text_3 bold">
-              { avatar.name }
+              { avatar?.name }
             </p>
             <VSpacerComponent space={.5} />
             
             {/* bio */}
             <p className="text_7 profile_info_container__bio">
-              { avatar.bio }
+              { avatar?.bio }
             </p>
             <VSpacerComponent space={1.5} />
 
+            {/* meta info */}
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
                 {/* Links */}
