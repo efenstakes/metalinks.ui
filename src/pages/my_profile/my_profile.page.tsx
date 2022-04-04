@@ -257,6 +257,7 @@ const MyProfilePage = () => {
                             <MetalinkCardComponent
                                 key={index}
                                 metaLink={metaLink}
+                                animationIndex={index+16+2}
                             />
                         )
                     })

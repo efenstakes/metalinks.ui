@@ -208,7 +208,7 @@ const ProfilePage = () => {
             avatar?.links.length > 0 && 
               <SectionTitleComponent title='Links' /> 
           }
-          <div className="padded_container">
+          <div className="padded_container_lg">
               
               {
                   avatar?.links.map((metaLink: MetaLink, index: number)=> {
@@ -217,6 +217,7 @@ const ProfilePage = () => {
                           <MetalinkCardComponent
                               key={index}
                               metaLink={metaLink}
+                              animationIndex={index+16+2}
                           />
                       )
                   })
