@@ -59,7 +59,7 @@ export const useCreateAvatar = ()=> {
 
     const { state, send } = useContractFunction(contract, 'createAvatar', { transactionName: 'createAvatarTransaction' })
 
-    return { state, send }
+    return { caState: state, caSend: send }
 }
 
 
@@ -67,9 +67,9 @@ export const useCreateMetaLink = ()=> {
     const wethInterface = new utils.Interface(WethAbi.abi)
     const contract = new Contract(CONTRACT_ADDRESS, wethInterface);
 
-    const { state, send } = useContractFunction(contract, 'addAvatarMetaLink', { transactionName: 'addAvatarMetaLinkTransaction' })
+    const { state, send } = useContractFunction(contract, 'addAvatarMetalink', { transactionName: 'addAvatarMetaLinkTransaction' })
 
-    return { state, send }
+    return { cmState: state, cmSend: send }
 }
 
 export const useAvatarID = (address: string)=> {
