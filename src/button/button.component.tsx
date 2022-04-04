@@ -19,8 +19,9 @@ type ComponentProps = {
     startIcon?: any 
     endIcon?: any
     size?: any
+    disabled?: boolean
   }
-const ButtonComponent = ({ isFlat, text, onClick, isSecondary, isOutlined, styles, classes=[], startIcon, endIcon, size, isError }: ComponentProps)=> {
+const ButtonComponent = ({ disabled = false, isFlat, text, onClick, isSecondary, isOutlined, styles, classes=[], startIcon, endIcon, size, isError }: ComponentProps)=> {
  
   if( isError ) {
     styles = {
@@ -32,6 +33,7 @@ const ButtonComponent = ({ isFlat, text, onClick, isSecondary, isOutlined, style
 
   return (
     <Button
+      disabled={disabled}
       size={ size || 'medium' }
       variant={ isOutlined ? "outlined" : "contained" }
       color={ isSecondary ? "secondary" : "primary" }
