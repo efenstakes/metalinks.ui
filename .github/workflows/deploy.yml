@@ -3,7 +3,7 @@ name: Deploy MetaLinks To Firebase
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     name: Build
