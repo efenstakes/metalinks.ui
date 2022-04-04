@@ -60,7 +60,7 @@ const AppbarComponent = ({ }: ComponentProps) => {
                 variables: { address: account }
             })
         }
-    }, [ account, getMyProfileResult ])
+    }, [ account ])
     
     useEffect(()=> {
         // set avatar only if avatar is not set
@@ -88,7 +88,7 @@ const AppbarComponent = ({ }: ComponentProps) => {
     return (
         <div className='main_appbar appbar_md padded_container_sm row ma_space_btn ca_center'>
             
-            <div onClick={deactivate} className="main_appbar__logo_container row ca_center">
+            <a href='/' className="main_appbar__logo_container row ca_center">
                 <img
                     src={logo_img} 
                     alt="logo" 
@@ -97,7 +97,7 @@ const AppbarComponent = ({ }: ComponentProps) => {
                 <p className='main_appbar__logo_container__logo text_3 bolder'>
                     MetaLinks
                 </p>
-            </div>
+            </a>
             
             {/* connect wallet if not logged in */}
             {
