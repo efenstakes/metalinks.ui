@@ -12,6 +12,7 @@ import SectionTitleComponent from '../../components/section_title/section_title.
 import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
 import ProfileLoadingPage from '../profile_loading/profile_loading.page'
 import ErrorLoadingAvatarComponent from '../../components/no_account/error_loading.component'
+import NoLinksComponent from '../../components/no_links/no_links.component'
 
 
 // models
@@ -183,17 +184,17 @@ const ProfilePage = () => {
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
               {/* Links */}
-              <div className="chip_md chip_primary_outlined">
+              <div className="chip_md chip_primary_outlined text_6">
                 { avatar?.links.length } Links
               </div>
 
               {/* Universes */}
-              <div className="chip_md chip_primary_outlined">
+              <div className="chip_md chip_primary_outlined text_6">
                 { avatar?.links.length } Universes
               </div>
 
               {/* Addresses */}
-              <div className="chip_md chip_primary_outlined">
+              <div className="chip_md chip_primary_outlined text_6">
                   { avatar?.addresses.length } Addresses
               </div>
 
@@ -203,8 +204,12 @@ const ProfilePage = () => {
           <VSpacerComponent space={6} />
 
           {/* metalinks if any */}
-          <SectionTitleComponent title='Links' />
+          {  
+            avatar?.links.length > 0 && 
+              <SectionTitleComponent title='Links' /> 
+          }
           <div className="padded_container">
+              
               {
                   avatar?.links.map((metaLink: MetaLink, index: number)=> {
 
@@ -215,6 +220,12 @@ const ProfilePage = () => {
                           />
                       )
                   })
+              }
+              {
+                  avatar && avatar?.links.length === 0 &&
+                      <NoLinksComponent
+                          text={`${avatar?.name} has not added any MetaLinks yet.`}
+                      />
               }
           </div>
             
