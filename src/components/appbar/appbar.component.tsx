@@ -92,9 +92,9 @@ const AppbarComponent = ({ }: ComponentProps) => {
                 <img
                     src={logo_img} 
                     alt="logo" 
-                    className="main_appbar__logo_container__image" 
+                    className="main_appbar__logo_container__image fd_10" 
                 />
-                <p className='main_appbar__logo_container__logo text_3 bolder'>
+                <p className='main_appbar__logo_container__logo text_3 bolder fd_15'>
                     MetaLinks
                 </p>
             </a>
@@ -103,7 +103,7 @@ const AppbarComponent = ({ }: ComponentProps) => {
             {
                 !account &&
                     <button 
-                        className="button main_appbar__button bold" 
+                        className="button main_appbar__button bold fd_16" 
                         onClick={activateBrowserWallet}
                     >
                         Connect Wallet
@@ -138,9 +138,9 @@ const AvatarComponent = ({ address, avatar }: AvatarComponentProps)=> {
                 <img
                     src={avatar?.avatar} 
                     alt="profile avatar" 
-                    className="main_appbar__right_container__image" 
+                    className="fd_8 main_appbar__right_container__image" 
                 />
-                <p className="text_6 bold main_appbar__right_container__text">
+                <p className="fd_11 text_6 bold main_appbar__right_container__text">
                     { avatar && avatar.name.slice(0, 3) }
                 </p>
             </a>
@@ -148,14 +148,16 @@ const AvatarComponent = ({ address, avatar }: AvatarComponentProps)=> {
     }
     return (
         <a href='/me' className="main_appbar__right_container row ma_center ca_center">
-            <Identicon 
-                string={address} 
-                size={20} 
-                palette={
-                    [ "brown", "black", "pink", "blue", "magenta" ]
-                } 
-            />
-            <p className="text_6 bold main_appbar__right_container__text">
+            <div className="fd_8">
+                <Identicon 
+                    string={address} 
+                    size={20} 
+                    palette={
+                        [ "brown", "black", "pink", "blue", "magenta" ]
+                    } 
+                />
+            </div>
+            <p className="fd_11 text_6 bold main_appbar__right_container__text">
                 { `${address.slice(0, 1)}..${ address.slice(address.length-3, address.length) }` }
             </p>
         </a>
