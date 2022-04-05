@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useWindowWidth } from '@react-hook/window-size'
 import clsx from 'clsx'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 
-import { FormControlLabel, FormGroup, Switch, CircularProgress, Alert } from '@mui/material'
-
+import { IconButton, FormControlLabel, FormGroup, Switch, CircularProgress, Alert } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 // components
 import VSpacerComponent from '../../components/v_spacer/v_spacer.component'
@@ -19,11 +21,12 @@ import { MetaLink } from '../../models/metalink.model'
 import { TransactionState } from '@usedapp/core'
 
 
-// abi
-import { Avatar } from '../../models/avatar.model'
-
 // services
 import { useCreateAvatar, useCreateMetaLink } from '../../services/metalinks.services'
+
+
+// actions
+import { add_metalink_action } from '../../store/actions/profile.actions'
 
 
 // styles
@@ -38,6 +41,13 @@ type ComponentProps = {
   isCreateLink: boolean
 }
 const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) => {
+    // to programatically navigate 
+    const navigate = useNavigate()
+
+    // to dispatch redux actions
+    const dispatch = useDispatch()
+    
+  
     const { caSend, caState } = useCreateAvatar()
     const { cmSend, cmState } = useCreateMetaLink()
 
@@ -63,14 +73,22 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
 
 
     const executeAction = ()=> {
+      // rese states
+      setIsLoading(false)
+      setHasError(false)
+
+      let has_error = false
+
       let { name, aka, bio, avatar, bg_avatar, universe, link, is_active } = metaLink  
 
       if( !name || name.length === 0 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, name: "Name cannot be empty" }
         })
       }
       if( name && name.length < 4 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, name: "Name should be atleast 4 characters" }
         })
@@ -80,11 +98,13 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
       if( !bio ) bio = ""
           
       if( !avatar || avatar.length === 0 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, avatar: "Avatar cannot be empty" }
         })
       }
       if( avatar && avatar.length < 5 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, avatar: "Avatar should be a valid link" }
         })
@@ -95,27 +115,37 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
       }
        
       if( isCreateLink && !universe || universe.length === 0 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, universe: "Universe cannot be empty" }
         })
       }
-      if( isCreateLink && universe && universe.length < 5 ) {
+      if( isCreateLink && universe && universe.length < 3 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, universe: "Universe should be a valid link" }
         })
       }
       
       if( isCreateLink && !link || link.length === 0 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, link: "Universe link cannot be empty" }
         })
       }
       if( isCreateLink && link && link.length < 5 ) {
+        has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, link: "Universe link should be a valid link" }
         })
       }
 
+      if( has_error ) {
+        console.log("data error")
+        return 
+      }
+
+      setIsLoading(true)
       if( isCreateLink ) {
         cmSend( name, aka, bio, universe, avatar, bg_avatar, link, is_active )
       } else {
@@ -126,6 +156,10 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
         reload()
       }
     }
+
+
+    // go to my avatar page
+    const goToMyAvatar = ()=> navigate("/me")
     
 
     useEffect(()=> {
@@ -155,6 +189,10 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
       if( status === "Success" as TransactionState ) {
         setIsLoading(false)
         setIsSuccessful(true)
+
+        if( isCreateLink ) {
+          dispatch(add_metalink_action(metaLink))
+        }
       }
       if( status === "Fail" as TransactionState ||  status === "Exception" as TransactionState ||  status === "Fail" as TransactionState ) {
         setIsLoading(false)
@@ -173,10 +211,27 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
           } 
       >
 
-        <VSpacerComponent space={1} />        
+        <VSpacerComponent space={1} />
+
+        {
+          width < 600 &&
+            <div className="row width_100 ma_center">
+              <IconButton 
+                color="primary" aria-label="close" className='add_metalink__close_button'
+                style={{
+                  color: 'white',
+                  backgroundColor: '#2e2e2e'
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+
+        } 
+        { width < 600 && <VSpacerComponent space={2} /> }    
 
         {/* title */}
-        <p className="text_4 bold" style={{  marginLeft: '1rem' }}>
+        <p className="su_3 text_4 bold" style={{  marginLeft: '1rem' }}>
           { isCreateLink ? "Add MetaLink" : "Create Avatar" }
         </p>
         <VSpacerComponent space={3} />
@@ -329,8 +384,13 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
                 onClick={executeAction}
                 startIcon={
                   isLoading 
-                    ? <CircularProgress size={20} style={{ color: 'white' }} />
+                    ? <CircularProgress size={20} style={{ color: 'black' }} />
                     : <div />
+                }
+                disabled={
+                  isCreateLink 
+                    ? cmState.status === "Mining"
+                    : caState.status === "Mining"
                 }
                 styles={{
                   ...FULL_WIDTH_BUTTON_STYLES,
@@ -354,17 +414,7 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
               isFlat
               classes={['primary_button', 'button_lg', 'add_metalink__button']}
               text="See My Avatar"
-              onClick={executeAction}
-              startIcon={
-                isLoading 
-                  ? <CircularProgress size={20} style={{ color: 'white' }} />
-                  : <div />
-              }
-              disabled={
-                isCreateLink 
-                  ? cmState.status === "Mining"
-                  : caState.status === "Mining"
-              }
+              onClick={goToMyAvatar}
               styles={{
                 ...FULL_WIDTH_BUTTON_STYLES,
                 alignSelf: 'center',
