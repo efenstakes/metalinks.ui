@@ -216,6 +216,10 @@ $standard_animation_duration: 360ms;
 }
 
 
+.infinite_bouncing {
+    animation: bounce_kf 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 2s infinite alternate-reverse both;
+}
+
 
 /*
   common animations was 40ms
