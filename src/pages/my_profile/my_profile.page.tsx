@@ -191,15 +191,15 @@ const MyProfilePage = () => {
             <div 
               className="profile_avatars_container__avatar_container__big_avatar absolute"
               style={{
-                backgroundImage: `url(${avatar.bg_avatar})`,
+                backgroundImage: `url(${avatar?.bg_avatar})`,
               }}
             />
 
             <div className="profile_avatars_container__avatar_container absolute row ma_center ca_center">
               <img 
-                src={ avatar.avatar } 
+                src={ avatar?.avatar } 
                 alt="avatar" 
-                className="profile_avatars_container__avatar_container__avatar" 
+                className="profile_avatars_container__avatar_container__avatar su_3" 
               />
             </div>
 
@@ -209,13 +209,13 @@ const MyProfilePage = () => {
           <div className="column ca_center profile_info_container">
 
             {/* name */}
-            <p className="text_3 bold">
+            <p className="text_3 bold su_5">
               { avatar?.name }
             </p>
             <VSpacerComponent space={.5} />
             
             {/* bio */}
-            <p className="text_7 profile_info_container__bio">
+            <p className="text_7 profile_info_container__bio su_7">
               { avatar?.bio }
             </p>
             <VSpacerComponent space={1.5} />
@@ -224,18 +224,18 @@ const MyProfilePage = () => {
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
                 {/* Links */}
-                <div className="chip_md chip_primary_outlined text_6">
-                    { avatar?.links.length } Links
+                <div className="chip_md chip_primary_outlined text_6 su_10">
+                    { avatar?.links?.length } Links
                 </div>
 
                 {/* Universes */}
-                <div className="chip_md chip_primary_outlined text_6">
-                    { avatar?.links.length } Universes
+                <div className="chip_md chip_primary_outlined text_6 su_11">
+                    { avatar?.links?.length } Universes
                 </div>
 
                 {/* Addresses */}
-                <div className="chip_md chip_primary_outlined text_6">
-                    { avatar?.addresses.length } Addresses
+                <div className="chip_md chip_primary_outlined text_6 su_13">
+                    { avatar?.addresses?.length } Addresses
                 </div>
 
             </div>
@@ -273,7 +273,7 @@ const MyProfilePage = () => {
           {/* add link button */}
           <FabComponent
               children={
-                  <button className="primary_button" onClick={toggleDrawer}>
+                  <button className="su_9 primary_button" onClick={toggleDrawer}>
                       Add a MetaLink
                   </button>
               }
