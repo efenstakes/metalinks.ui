@@ -5,12 +5,15 @@ import { Contract } from '@ethersproject/contracts'
 
 import axios from 'axios'
 
+// models
+import { Avatar } from '../models/avatar.model'
+
 
 // abi
 import WethAbi from '../assets/abi/MetaLinks.json'
-import { Avatar } from '../models/avatar.model'
 
-const CONTRACT_ADDRESS = '0x4CF5744CDd62bddc322Be3045F7bd337d65fbaDF'
+// MetaLinks contract address
+const CONTRACT_ADDRESS = '0x693ed407803EFB19cedF600B911C142aBbFF4D9e'
 
 
 
