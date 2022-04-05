@@ -161,7 +161,7 @@ const ProfilePage = () => {
               <img 
                 src={ avatar.avatar } 
                 alt="avatar" 
-                className="profile_avatars_container__avatar_container__avatar" 
+                className="profile_avatars_container__avatar_container__avatar su_2" 
               />
             </div>
 
@@ -170,12 +170,12 @@ const ProfilePage = () => {
 
           <div className="column ca_center profile_info_container">
 
-            <p className="text_3 bold">
+            <p className="text_3 bold su_4">
               { avatar?.name }
             </p>
             <VSpacerComponent space={.5} />
 
-            <p className="text_7 profile_info_container__bio">
+            <p className="text_7 profile_info_container__bio su_8">
               { avatar?.bio }
             </p>
             <VSpacerComponent space={1.5} />
@@ -184,17 +184,17 @@ const ProfilePage = () => {
             <div className="row ma_evenly ca_center profile_info_container__chips">
 
               {/* Links */}
-              <div className="chip_md chip_primary_outlined text_6">
+              <div className="chip_md chip_primary_outlined text_6 su_11">
                 { avatar?.links.length } Links
               </div>
 
               {/* Universes */}
-              <div className="chip_md chip_primary_outlined text_6">
+              <div className="chip_md chip_primary_outlined text_6 su_13">
                 { avatar?.links.length } Universes
               </div>
 
               {/* Addresses */}
-              <div className="chip_md chip_primary_outlined text_6">
+              <div className="chip_md chip_primary_outlined text_6 su_16">
                   { avatar?.addresses.length } Addresses
               </div>
 

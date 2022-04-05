@@ -14,15 +14,15 @@ const NoLinksComponent = ({ text }: ComponentProps) => {
   return (
     <div className='no_links_container column ca_center'>
         
-        <img src={face_img} className='no_links_container__image' />
+        <img src={face_img} className='no_links_container__image infinite_bouncing' />
         <VSpacerComponent space={1} />
         
-        <p className="text_3 bold no_links_container__title">
+        <p className="su_5 text_3 bold no_links_container__title">
             No MetaLinks
         </p>
         <VSpacerComponent space={.5} />
         
-        <p className="text_6 no_links_container__text text_center">
+        <p className="su_8 text_6 no_links_container__text text_center">
             { text }
         </p>
 

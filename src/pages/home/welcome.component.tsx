@@ -31,30 +31,30 @@ const WelcomeComponent = () => {
                         <img 
                             src={face_small} 
                             alt="face_small" 
-                            className='welcome_section__underlay__image welcome_section__underlay__small'
+                            className='welcome_section__underlay__image welcome_section__underlay__small su_7'
                         />
                 }
                 <img 
                     src={face_small} 
                     alt="face_small" 
-                    className='welcome_section__underlay__image welcome_section__underlay__small'
+                    className='welcome_section__underlay__image welcome_section__underlay__small su_10'
                 />
                 <img 
                     src={face_big} 
                     alt="face_small" 
-                    className='welcome_section__underlay__image welcome_section__underlay__big'
+                    className='welcome_section__underlay__image welcome_section__underlay__big su_12'
                 />
                 <img 
                     src={face_small} 
                     alt="face_small" 
-                    className='welcome_section__underlay__image welcome_section__underlay__small'
+                    className='welcome_section__underlay__image welcome_section__underlay__small su_15'
                 />
                 {
                     width > 600 &&
                         <img 
                             src={face_small} 
                             alt="face_small" 
-                            className='welcome_section__underlay__image welcome_section__underlay__small'
+                            className='welcome_section__underlay__image welcome_section__underlay__small su_17'
                         />
                 }
             </div>
@@ -62,11 +62,11 @@ const WelcomeComponent = () => {
             {/* info */}
             <div className="welcome_section__info column ma_center ca_center">
 
-                <p className="title_3">
+                <p className="title_3 su_18">
                     MetaLinks
                 </p>
 
-                <p className="welcome_section__info__text text_6">
+                <p className="welcome_section__info__text text_6 su_20">
                     Want to keep your different Metaverse profiles in one 
                     place? MetaLinks is here to help you do that.
                 </p>
@@ -75,7 +75,7 @@ const WelcomeComponent = () => {
                 {
                     !account &&
                         <button 
-                            className="black_button button_md bold" 
+                            className="black_button button_md bold su_24" 
                             onClick={activateBrowserWallet}
                         >
                             Connect Wallet
