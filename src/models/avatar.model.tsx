@@ -26,6 +26,7 @@ export interface Avatar {
 
 
 export const toAvatar = (avatarData): Avatar => {
+    if( !avatarData ) return null
     return {
         id: avatarData?.id,
         name: avatarData?.name,
@@ -33,7 +34,7 @@ export const toAvatar = (avatarData): Avatar => {
         bio: avatarData?.bio,
         avatar: avatarData?.avatarURI,
         bg_avatar: avatarData?.bgAvatarURI,
-        addresses: avatarData.addresses,
+        addresses: avatarData?.addresses,
 
         links: avatarData?.links.map((lik)=> {
             return {
