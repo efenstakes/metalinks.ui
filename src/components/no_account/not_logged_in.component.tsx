@@ -5,7 +5,7 @@ import VSpacerComponent from "../v_spacer/v_spacer.component"
 
 
 // assets
-import face_img from '../../assets/images/face-big.png'
+import face_img from '../../assets/images/face-wheat.png'
 
 
 import './not_logged_in.component.scss'
@@ -19,7 +19,7 @@ const NotLoggedInComponent = () => {
     return (  
         <div className="not_loggedin_container g_bg_ps_1 column ma_center ca_center">
 
-            <img src={face_img} className='not_loggedin_container__image infinite_bouncing' />
+            <img src={face_img} className='not_loggedin_container__image small_indicator_image infinite_bouncing' />
             <VSpacerComponent space={1} />
 
             <p className="su_6 text_2 bold">
