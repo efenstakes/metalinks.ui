@@ -44,12 +44,10 @@ const HomePage = () => {
     const avatar: Avatar | null = useSelector((state: StoreState)=> state?.profile?.avatar)
 
     
-
     // get avatar later when account connects
     const [getMyAvatar, getMyAvatarResult] = useLazyQuery(GET_AVATAR_DETAILS_BY_ADDRESS_QUERY)
 
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
     const [isCreateAvatarDrawerOpen, setIsCreateAvatarDrawerOpen] = useState<boolean>(false)
 
