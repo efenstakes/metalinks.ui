@@ -38,9 +38,10 @@ import { EXTRA_LG_FULL_WIDTH_INPUT_STYLES, FULL_WIDTH_BUTTON_STYLES } from '../.
 type ComponentProps = {
   closeDrawer: ()=> void
   reload?: ()=> void
+  onViewAvatar?: ()=> void
   isCreateLink: boolean
 }
-const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) => {
+const AddMetaLinkPage = ({ closeDrawer, reload, onViewAvatar, isCreateLink }: ComponentProps) => {
     // to programatically navigate 
     const navigate = useNavigate()
 
@@ -114,26 +115,26 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
         bg_avatar = ""
       }
        
-      if( isCreateLink && !universe || universe.length === 0 ) {
+      if( isCreateLink && (!universe || universe.length === 0) ) {
         has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, universe: "Universe cannot be empty" }
         })
       }
-      if( isCreateLink && universe && universe.length < 3 ) {
+      if( isCreateLink && (universe && universe.length < 3) ) {
         has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, universe: "Universe should be a valid link" }
         })
       }
       
-      if( isCreateLink && !link || link.length === 0 ) {
+      if( isCreateLink && (!link || link.length === 0) ) {
         has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, link: "Universe link cannot be empty" }
         })
       }
-      if( isCreateLink && link && link.length < 5 ) {
+      if( isCreateLink && (link && link.length < 5) ) {
         has_error = true
         setMetaLinkErrors((state)=> {
           return { ...state, link: "Universe link should be a valid link" }
@@ -150,10 +151,6 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
         cmSend( name, aka, bio, universe, avatar, bg_avatar, link, is_active )
       } else {
         caSend( name, aka, bio, avatar, bg_avatar )
-      }
-
-      if( reload ) {
-        reload()
       }
     }
 
@@ -193,6 +190,11 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
         if( isCreateLink ) {
           dispatch(add_metalink_action(metaLink))
         }
+
+        if( reload ) {
+          reload()
+        }
+
       }
       if( status === "Fail" as TransactionState ||  status === "Exception" as TransactionState ||  status === "Fail" as TransactionState ) {
         setIsLoading(false)
@@ -414,7 +416,7 @@ const AddMetaLinkPage = ({ closeDrawer, reload, isCreateLink }: ComponentProps) 
               isFlat
               classes={['primary_button', 'button_lg', 'add_metalink__button']}
               text="See My Avatar"
-              onClick={goToMyAvatar}
+              onClick={onViewAvatar || goToMyAvatar}
               styles={{
                 ...FULL_WIDTH_BUTTON_STYLES,
                 alignSelf: 'center',
