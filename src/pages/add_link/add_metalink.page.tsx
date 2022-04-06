@@ -410,6 +410,7 @@ const AddMetaLinkPage = ({ closeDrawer, reload, onViewAvatar, isCreateLink }: Co
               Your MetaLink avatar has been created, {metaLink.name}.
             </Alert>
         }
+        { isSuccessful && <VSpacerComponent space={1} /> }
         {
           isSuccessful && !isCreateLink &&
             <ButtonComponent
