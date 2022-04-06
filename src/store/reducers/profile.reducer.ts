@@ -34,7 +34,7 @@ export const profile_reducer = (state=initialState, { type, payload}) => {
         case LOGOUT:
             return {
                 avatar: null,
-                isLoggedIn: true
+                isLoggedIn: false
             }    
     
         default:
