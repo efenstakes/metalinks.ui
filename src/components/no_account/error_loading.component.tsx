@@ -16,11 +16,12 @@ import './not_logged_in.component.scss'
 type ComponentProps = {
     title?: string
     text?: string
+    ctaText?: string
     hideCta?: boolean
     showIcon?: boolean
     refresh: ()=> void
 }
-const ErrorLoadingAvatarComponent = ({ title, text, refresh, hideCta = false, showIcon = true }: ComponentProps) => {
+const ErrorLoadingAvatarComponent = ({ title, text, ctaText, refresh, hideCta = false, showIcon = true }: ComponentProps) => {
     // get logged in address    
     const { activateBrowserWallet } = useEthers()
     
@@ -49,7 +50,7 @@ const ErrorLoadingAvatarComponent = ({ title, text, refresh, hideCta = false, sh
                         className="su_14 button main_appbar__button bold" 
                         onClick={refresh}
                     >
-                        Refresh
+                        { ctaText ? ctaText : "Refresh" }
                     </button>
             }
 
