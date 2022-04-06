@@ -46,6 +46,7 @@ export const toAvatar = (avatarData): Avatar => {
                 avatar: lik?.avatarURI,
                 bg_avatar: lik?.bgAvatarURI,
                 link: lik?.link,
+                is_active: lik?.active,
             }
         }),
     }

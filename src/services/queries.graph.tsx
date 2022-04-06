@@ -16,6 +16,7 @@ export const GET_AVATAR_DETAILS_BY_ID_QUERY = gql`
                 name
                 aka
                 bio
+                active
                 universe {
                     id
                     name
