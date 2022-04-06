@@ -23,6 +23,8 @@
     background-repeat: none;
     background-size: cover;
     background-position: center;
+
+    background-color: wheat;
     
 
     @media screen and (max-width: 560px) {
@@ -44,6 +46,7 @@
 
     border-radius: 50%;
 
+    background-color: wheat;
     border: .32rem solid $WHITE_COLOR;
 
     @media screen and (max-width: 560px) {
