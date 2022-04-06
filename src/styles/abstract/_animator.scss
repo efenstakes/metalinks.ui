@@ -167,6 +167,23 @@ $standard_animation_duration: 360ms;
 }
 
 
+@keyframes bounce_kf_sm {
+    0% {
+        transform: translateY(0);
+    }
+    10% {
+        transform: translateY(-2vh);
+    }
+    20% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-1vh);
+    }
+    40% {
+        transform: translateY(0);
+    }
+}
 @keyframes bounce_kf {
     0% {
         transform: translateY(0);
@@ -217,7 +234,7 @@ $standard_animation_duration: 360ms;
 
 
 .infinite_bouncing {
-    animation: bounce_kf 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 2s infinite alternate-reverse both;
+    animation: bounce_kf_sm 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 2s infinite alternate-reverse both;
 }
 
 
