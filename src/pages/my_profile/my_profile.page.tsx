@@ -165,12 +165,35 @@ const MyProfilePage = () => {
 
                 <div className="padded_container_lg">
                     <ErrorLoadingAvatarComponent 
-                        title="No Account"
-                        text="Account was not found."
-                        refresh={refreshAvatar} 
+                        title="No Avatar"
+                        text="Avatar was not found. Click the create button to create your MetaLinks avatar."
+                        refresh={
+                            ()=> {
+                                console.log("open drawrr")
+                                setIsCreateAvatarDrawerOpen(true)
+                            }
+                        }
+                        ctaText="Create My Avatar"
                         hideCta
                     />
                 </div>
+
+                <Drawer
+                    anchor='right'
+                    open={isCreateAvatarDrawerOpen}
+                    onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
+                >
+                    <AddMetaLinkPage 
+                        isCreateLink={false} 
+                        closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } 
+                        onViewAvatar={
+                            ()=> {
+                                console.log("get avatar")
+                                refreshAvatar()
+                            }
+                        }
+                    />
+                </Drawer>
 
             </div>
         )
@@ -265,15 +288,16 @@ const MyProfilePage = () => {
                 {
                     avatar && avatar?.links.length === 0 &&
                         <NoLinksComponent
-                            text={`${avatar?.name} has not added any MetaLinks yet.`}
+                            text={`You have not added any MetaLinks yet. Click on the Add Metalink button to start your metaverse discovery.`}
                         />
                 }
           </div>
+          <VSpacerComponent space={6} />
               
           {/* add link button */}
           <FabComponent
               children={
-                  <button className="su_9 primary_button" onClick={toggleDrawer}>
+                  <button className="su_9 primary_button" onClick={()=> setIsAddLinkDrawerOpen(true)}>
                       Add a MetaLink
                   </button>
               }
@@ -286,18 +310,6 @@ const MyProfilePage = () => {
               onClose={ ()=> setIsAddLinkDrawerOpen(false) }
           >
               <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
-          </Drawer>
-
-          <Drawer
-              anchor='right'
-              open={isCreateAvatarDrawerOpen}
-              onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
-          >
-              <AddMetaLinkPage 
-                isCreateLink={false} 
-                closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } 
-                reload={refreshAvatar}
-            />
           </Drawer>
 
       </div>
