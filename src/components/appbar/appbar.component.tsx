@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Identicon from 'react-identicons'
 
+import { IconButton } from '@mui/material'
+import LogoutIcon from '@mui/icons-material/Logout'
+
 
 // assets
 import logo_img from '../../assets/images/face-small.png'
@@ -85,6 +88,12 @@ const AppbarComponent = ({ }: ComponentProps) => {
     }, [ ])
 
 
+    const logOut = ()=> {
+        deactivate()
+        dispatch(logout_action())
+    }
+
+
     return (
         <div className='main_appbar appbar_md padded_container_sm row ma_space_btn ca_center'>
             
@@ -110,13 +119,21 @@ const AppbarComponent = ({ }: ComponentProps) => {
                     </button>
             }
 
-            {/* show icon & name */}
+            {/* show icon & name & logout button*/}
             {
-                account && 
-                    <AvatarComponent 
-                        address={account} 
-                        avatar={avatar}
-                    />
+                account &&
+                    <div className="row">
+                        
+                        <AvatarComponent 
+                            address={account} 
+                            avatar={avatar}
+                        />
+
+                        <IconButton onClick={logOut} className='fd_15' color="primary" aria-label="logout" style={{ marginLeft: '1.2rem', color: '#1e1e1e' }}>
+                            <LogoutIcon />
+                        </IconButton>
+
+                    </div>
             }
             
 
