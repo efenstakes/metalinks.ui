@@ -60,16 +60,18 @@ const WelcomeComponent = () => {
             </div>
 
             {/* info */}
-            <div className="welcome_section__info column ma_center ca_center">
+            <div className="welcome_section__info width_100 column ma_center ca_center">
 
                 <p className="title_3 su_18">
                     MetaLinks
                 </p>
 
-                <p className="welcome_section__info__text text_6 su_20">
-                    Want to keep your different Metaverse profiles in one 
-                    place? MetaLinks is here to help you do that.
-                </p>
+                <div className="welcome_section__info__text__container">
+                    <p className="welcome_section__info__text text_6 su_20">
+                        Want to keep your different Metaverse profiles in one 
+                        place? MetaLinks is here to help you do that.
+                    </p>
+                </div>
                 <VSpacerComponent space={2} />
  
                 {
