@@ -35,14 +35,11 @@ import './home.page.scss'
 
 
 const HomePage = () => {  
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     // get account  
     const { account } = useEthers()
     
-    // get data from redux
-    const avatar: Avatar | null = useSelector((state: StoreState)=> state?.profile?.avatar)
-
     
     // get avatar later when account connects
     const [getMyAvatar, getMyAvatarResult] = useLazyQuery(GET_AVATAR_DETAILS_BY_ADDRESS_QUERY)
@@ -67,21 +64,21 @@ const HomePage = () => {
 
     // set avatar if uts not set and user just logged in
     useEffect(()=> {
-        if( !avatar && getMyAvatarResult && getMyAvatarResult.data && getMyAvatarResult.data.avatars && getMyAvatarResult.data.avatars.length > 0 ) {
-            dispatch(set_profile_action(toAvatar(getMyAvatarResult.data.avatars[0])))
-        }
+        // if( !avatar && getMyAvatarResult && getMyAvatarResult.data && getMyAvatarResult.data.avatars && getMyAvatarResult.data.avatars.length > 0 ) {
+        //     dispatch(set_profile_action(toAvatar(getMyAvatarResult.data.avatars[0])))
+        // }
     }, [ getMyAvatarResult ])
 
     
     useEffect(()=> {
-        if( account && !avatar ) {
-            console.log("get profile of adrss ", account)
-            getMyAvatar({
-                variables: { address: account },
-            })
-        } else {
-            console.log("no accnt }, useEffect([ ]) ") 
-         }
+        // if( account && !avatar ) {
+        //     console.log("get profile of adrss ", account)
+        //     getMyAvatar({
+        //         variables: { address: account },
+        //     })
+        // } else {
+        //     console.log("no accnt }, useEffect([ ]) ") 
+        //  }
     }, [ ])
 
     const openCreateMetaLinkDrawer = ()=> {
@@ -103,10 +100,10 @@ const HomePage = () => {
             <WelcomeComponent />
 
             {/* metalinks if any */}
-            {
+            {/* {
                 avatar?.links.length > 0 && <SectionTitleComponent title='Links' />
-            }
-            <div className="padded_container">
+            } */}
+            {/* <div className="padded_container">
                 { !getMyAvatarResult.loading &&
                     avatar?.links.map((metaLink: MetaLink, index: number)=> {
 
@@ -139,10 +136,10 @@ const HomePage = () => {
                         />
                 }
             </div>
-            <VSpacerComponent space={5} />
+            <VSpacerComponent space={5} /> */}
 
             {/* add link button */}
-            {
+            {/* {
                 account && !avatar &&
                     <FabComponent
                         children={
@@ -151,8 +148,8 @@ const HomePage = () => {
                             </button>
                         }
                     />
-            }
-            {
+            } */}
+            {/* {
                 account && avatar &&
                     <FabComponent
                         children={
@@ -161,7 +158,7 @@ const HomePage = () => {
                             </button>
                         }
                     />
-            }
+            } */}
 
             
             <Drawer
