@@ -45,16 +45,16 @@ import './my_profile.page.scss'
 
 
 const MyProfilePage = () => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     // get data from redux
-    let avatar: Avatar | null = useSelector((state: StoreState)=> state?.profile?.avatar)
+    // let avatar: Avatar | null = useSelector((state: StoreState)=> state?.profile?.avatar)
 
     
     // get logged in address    
     const { deactivate, account } = useEthers()
     
-    const [getMyProfile, getMyProfileResult] = useLazyQuery(GET_AVATAR_DETAILS_BY_ADDRESS_QUERY)
+    // const [getMyProfile, getMyProfileResult] = useLazyQuery(GET_AVATAR_DETAILS_BY_ADDRESS_QUERY)
 
     
     const [isAddLinkDrawerOpen, setIsAddLinkDrawerOpen] = useState<boolean>(false)
@@ -63,45 +63,45 @@ const MyProfilePage = () => {
 
     // get avatar details - avatar & metalinks
     useEffect(()=> {
-      if( account && !avatar ) {
-        console.log("get profile of adrss ", account)
-        getMyProfile({
-            variables: { address: account },
-        })
-      } else {
-        console.log("no accnt }, useEffect([ account ]) ") 
-      }
+    //   if( account && !avatar ) {
+    //     console.log("get profile of adrss ", account)
+    //     getMyProfile({
+    //         variables: { address: account },
+    //     })
+    //   } else {
+    //     console.log("no accnt }, useEffect([ account ]) ") 
+    //   }
     }, [ account ])
 
     // only set avatar if its not set
-    useEffect(()=> {
-        if( !avatar && getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
-            dispatch(set_profile_action(toAvatar(getMyProfileResult.data.avatars[0])))
-        }
-    }, [ getMyProfileResult ])
+    // useEffect(()=> {
+        // if( !avatar && getMyProfileResult && getMyProfileResult.data && getMyProfileResult.data.avatars && getMyProfileResult.data.avatars.length > 0 ) {
+        //     dispatch(set_profile_action(toAvatar(getMyProfileResult.data.avatars[0])))
+        // }
+    // }, [ getMyProfileResult ])
 
     useEffect(()=> {
-        if( account && !avatar ) {
-            console.log("get profile of adrss ", account)
-            getMyProfile({
-                variables: { address: account },
-            })
-        } else {
-            console.log("no accnt }, useEffect([ ]) ") 
-         }
+        // if( account && !avatar ) {
+        //     console.log("get profile of adrss ", account)
+        //     getMyProfile({
+        //         variables: { address: account },
+        //     })
+        // } else {
+        //     console.log("no accnt }, useEffect([ ]) ") 
+        //  }
     }, [ ])
 
 
     const refreshAvatar = ()=> {
-        getMyProfile({
-            variables: { account },
-        })
+        // getMyProfile({
+        //     variables: { account },
+        // })
     }
 
     const toggleDrawer = ()=> {}
 
 
-    console.log("getMyProfileResult ", getMyProfileResult)
+    // console.log("getMyProfileResult ", getMyProfileResult)
     
 
 
@@ -123,197 +123,197 @@ const MyProfilePage = () => {
     }
 
     // when loading
-    if( !avatar && getMyProfileResult.loading ) {
-      return (  
-        <ProfileLoadingPage />
-      )
-    }
+    // if( !avatar && getMyProfileResult.loading ) {
+    //   return (  
+    //     <ProfileLoadingPage />
+    //   )
+    // }
 
     // no account
-    if( !avatar && getMyProfileResult.error ) {
-        console.log("no account")
-        return (
-            <div className='page'>
+    // if( !avatar && getMyProfileResult.error ) {
+    //     console.log("no account")
+    //     return (
+    //         <div className='page'>
             
-                {/* appbar */}
-                <AppbarComponent />
-                <VSpacerComponent space={10} />
+    //             {/* appbar */}
+    //             <AppbarComponent />
+    //             <VSpacerComponent space={10} />
 
-                <div className="padded_container_lg">
-                    <ErrorLoadingAvatarComponent refresh={refreshAvatar} />
-                </div>
+    //             <div className="padded_container_lg">
+    //                 <ErrorLoadingAvatarComponent refresh={refreshAvatar} />
+    //             </div>
 
-            </div>
-        )
-    }
+    //         </div>
+    //     )
+    // }
     
     // no error but no account either
-    if(
-        !avatar && 
-        !getMyProfileResult.error && 
-        getMyProfileResult.data &&
-        getMyProfileResult.data?.avatars &&
-        getMyProfileResult.data.avatars?.length === 0
-    ) {
-        console.log("no error but no account either")
-        return (
-            <div className='page'>
+    // if(
+    //     !avatar && 
+    //     !getMyProfileResult.error && 
+    //     getMyProfileResult.data &&
+    //     getMyProfileResult.data?.avatars &&
+    //     getMyProfileResult.data.avatars?.length === 0
+    // ) {
+    //     console.log("no error but no account either")
+    //     return (
+    //         <div className='page'>
             
-                {/* appbar */}
-                <AppbarComponent />
-                <VSpacerComponent space={10} />
+    //             {/* appbar */}
+    //             <AppbarComponent />
+    //             <VSpacerComponent space={10} />
 
-                <div className="padded_container_lg">
-                    <ErrorLoadingAvatarComponent 
-                        title="No Avatar"
-                        text="Avatar was not found. Click the create button to create your MetaLinks avatar."
-                        refresh={
-                            ()=> {
-                                console.log("open drawrr")
-                                setIsCreateAvatarDrawerOpen(true)
-                            }
-                        }
-                        ctaText="Create My Avatar"
-                        hideCta
-                    />
-                </div>
+    //             <div className="padded_container_lg">
+    //                 <ErrorLoadingAvatarComponent 
+    //                     title="No Avatar"
+    //                     text="Avatar was not found. Click the create button to create your MetaLinks avatar."
+    //                     refresh={
+    //                         ()=> {
+    //                             console.log("open drawrr")
+    //                             setIsCreateAvatarDrawerOpen(true)
+    //                         }
+    //                     }
+    //                     ctaText="Create My Avatar"
+    //                     hideCta
+    //                 />
+    //             </div>
 
-                <Drawer
-                    anchor='right'
-                    open={isCreateAvatarDrawerOpen}
-                    onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
-                >
-                    <AddMetaLinkPage 
-                        isCreateLink={false} 
-                        closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } 
-                        onViewAvatar={
-                            ()=> {
-                                console.log("get avatar")
-                                refreshAvatar()
-                            }
-                        }
-                    />
-                </Drawer>
+    //             <Drawer
+    //                 anchor='right'
+    //                 open={isCreateAvatarDrawerOpen}
+    //                 onClose={ ()=> setIsCreateAvatarDrawerOpen(false) }
+    //             >
+    //                 <AddMetaLinkPage 
+    //                     isCreateLink={false} 
+    //                     closeDrawer={ ()=> setIsCreateAvatarDrawerOpen(false) } 
+    //                     onViewAvatar={
+    //                         ()=> {
+    //                             console.log("get avatar")
+    //                             refreshAvatar()
+    //                         }
+    //                     }
+    //                 />
+    //             </Drawer>
 
-            </div>
-        )
-    }
+    //         </div>
+    //     )
+    // }
 
-    // we have avatar, show it
-    avatar = toAvatar(getMyProfileResult.data?.avatars[0] || avatar)
-    console.log("avatar ", avatar)
-    return (
-      <div className='page'>
+    // // we have avatar, show it
+    // // avatar = toAvatar(getMyProfileResult.data?.avatars[0] || avatar)
+    // console.log("avatar ", avatar)
+    // return (
+    //   <div className='page'>
                   
-          {/* appbar */}
-          <AppbarComponent />
+    //       {/* appbar */}
+    //       <AppbarComponent />
 
-          {/* avatars */}
-          <div className="profile_avatars_container">
+    //       {/* avatars */}
+    //       <div className="profile_avatars_container">
 
-            <div 
-              className="profile_avatars_container__avatar_container__big_avatar absolute"
-              style={{
-                backgroundImage: `url(${avatar?.bg_avatar})`,
-              }}
-            />
+    //         <div 
+    //           className="profile_avatars_container__avatar_container__big_avatar absolute"
+    //           style={{
+    //             backgroundImage: `url(${avatar?.bg_avatar})`,
+    //           }}
+    //         />
 
-            <div className="profile_avatars_container__avatar_container absolute row ma_center ca_center">
-              <img 
-                src={ avatar?.avatar } 
-                alt="avatar" 
-                className="profile_avatars_container__avatar_container__avatar su_3" 
-              />
-            </div>
+    //         <div className="profile_avatars_container__avatar_container absolute row ma_center ca_center">
+    //           <img 
+    //             src={ avatar?.avatar } 
+    //             alt="avatar" 
+    //             className="profile_avatars_container__avatar_container__avatar su_3" 
+    //           />
+    //         </div>
 
-          </div>
-          <VSpacerComponent space={1} />
+    //       </div>
+    //       <VSpacerComponent space={1} />
 
-          <div className="column ca_center profile_info_container">
+    //       <div className="column ca_center profile_info_container">
 
-            {/* name */}
-            <p className="text_3 bold su_5">
-              { avatar?.name }
-            </p>
-            <VSpacerComponent space={.5} />
+    //         {/* name */}
+    //         <p className="text_3 bold su_5">
+    //           { avatar?.name }
+    //         </p>
+    //         <VSpacerComponent space={.5} />
             
-            {/* bio */}
-            <p className="text_7 profile_info_container__bio su_7">
-              { avatar?.bio }
-            </p>
-            <VSpacerComponent space={1.5} />
+    //         {/* bio */}
+    //         <p className="text_7 profile_info_container__bio su_7">
+    //           { avatar?.bio }
+    //         </p>
+    //         <VSpacerComponent space={1.5} />
 
-            {/* meta info */}
-            <div className="row ma_evenly ca_center profile_info_container__chips">
+    //         {/* meta info */}
+    //         <div className="row ma_evenly ca_center profile_info_container__chips">
 
-                {/* Links */}
-                <div className="chip_md chip_primary_outlined text_6 su_10">
-                    { avatar?.links?.length } Links
-                </div>
+    //             {/* Links */}
+    //             <div className="chip_md chip_primary_outlined text_6 su_10">
+    //                 { avatar?.links?.length } Links
+    //             </div>
 
-                {/* Universes */}
-                <div className="chip_md chip_primary_outlined text_6 su_11">
-                    { avatar?.links?.length } Universes
-                </div>
+    //             {/* Universes */}
+    //             <div className="chip_md chip_primary_outlined text_6 su_11">
+    //                 { avatar?.links?.length } Universes
+    //             </div>
 
-                {/* Addresses */}
-                <div className="chip_md chip_primary_outlined text_6 su_13">
-                    { avatar?.addresses?.length } Addresses
-                </div>
+    //             {/* Addresses */}
+    //             <div className="chip_md chip_primary_outlined text_6 su_13">
+    //                 { avatar?.addresses?.length } Addresses
+    //             </div>
 
-            </div>
+    //         </div>
 
-          </div>
-          <VSpacerComponent space={6} />
+    //       </div>
+    //       <VSpacerComponent space={6} />
 
-          {/* metalinks if any */}
-          {  
-            avatar?.links.length > 0 && 
-                <SectionTitleComponent title='My Links' /> 
-          }
-          <div className="padded_container_lg">
+    //       {/* metalinks if any */}
+    //       {  
+    //         avatar?.links.length > 0 && 
+    //             <SectionTitleComponent title='My Links' /> 
+    //       }
+    //       <div className="padded_container_lg">
 
-                {
-                    avatar?.links.map((metaLink: MetaLink, index: number)=> {
+    //             {
+    //                 avatar?.links.map((metaLink: MetaLink, index: number)=> {
 
-                        return (
-                            <MetalinkCardComponent
-                                key={index}
-                                metaLink={metaLink}
-                                animationIndex={index+16+2}
-                            />
-                        )
-                    })
-                }
-                {
-                    avatar && avatar?.links.length === 0 &&
-                        <NoLinksComponent
-                            text={`You have not added any MetaLinks yet. Click on the Add Metalink button to start your metaverse discovery.`}
-                        />
-                }
-          </div>
-          <VSpacerComponent space={6} />
+    //                     return (
+    //                         <MetalinkCardComponent
+    //                             key={index}
+    //                             metaLink={metaLink}
+    //                             animationIndex={index+16+2}
+    //                         />
+    //                     )
+    //                 })
+    //             }
+    //             {
+    //                 avatar && avatar?.links.length === 0 &&
+    //                     <NoLinksComponent
+    //                         text={`You have not added any MetaLinks yet. Click on the Add Metalink button to start your metaverse discovery.`}
+    //                     />
+    //             }
+    //       </div>
+    //       <VSpacerComponent space={6} />
               
-          {/* add link button */}
-          <FabComponent
-              children={
-                  <button className="su_9 primary_button" onClick={()=> setIsAddLinkDrawerOpen(true)}>
-                      Add a MetaLink
-                  </button>
-              }
-          />
+    //       {/* add link button */}
+    //       <FabComponent
+    //           children={
+    //               <button className="su_9 primary_button" onClick={()=> setIsAddLinkDrawerOpen(true)}>
+    //                   Add a MetaLink
+    //               </button>
+    //           }
+    //       />
 
                       
-          <Drawer
-              anchor='right'
-              open={isAddLinkDrawerOpen}
-              onClose={ ()=> setIsAddLinkDrawerOpen(false) }
-          >
-              <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
-          </Drawer>
+    //       <Drawer
+    //           anchor='right'
+    //           open={isAddLinkDrawerOpen}
+    //           onClose={ ()=> setIsAddLinkDrawerOpen(false) }
+    //       >
+    //           <AddMetaLinkPage isCreateLink closeDrawer={ ()=> setIsAddLinkDrawerOpen(false) } />
+    //       </Drawer>
 
-      </div>
-    )
+    //   </div>
+    // )
 }
 
 export default MyProfilePage
