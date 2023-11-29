@@ -41,27 +41,27 @@ import { ChainId, DAppProvider, Config } from '@usedapp/core'
 const config: Config = {
     readOnlyChainId: ChainId.Rinkeby,
     readOnlyUrls: {
-      [ChainId.Rinkeby]: 'https://rinkeby.infura.io/v3/657b97c9050a433ebd7e1d203dc0d8f4',
+      [ChainId.Sepolia]: 'https://rinkeby.infura.io/v3/657b97c9050a433ebd7e1d203dc0d8f4',
     },
 } 
 
 // graphql config
-const client = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/efenstakes/metalinks',
-  cache: new InMemoryCache()
-});
+// const client = new ApolloClient({
+//   uri: 'https://api.thegraph.com/subgraphs/name/efenstakes/metalinks',
+//   cache: new InMemoryCache()
+// });
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReduxProvider store={store}>
-      <ApolloProvider client={client}>
+    {/* <ReduxProvider store={store}> */}
+      {/* <ApolloProvider client={client}> */}
         <DAppProvider config={config}>
           <ThemeProvider theme={theme}>
             <App />
           </ThemeProvider>
         </DAppProvider>
-      </ApolloProvider>
-    </ReduxProvider>
+      {/* </ApolloProvider> */}
+    {/* </ReduxProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
 )
